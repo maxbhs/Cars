@@ -4,7 +4,12 @@ using System.Collections;
 public class Hover : MonoBehaviour
 {
 
-    public float fMag = 0f;
+    public float speed = 90f;
+    public float turnSpeed = 5f;
+    public float hoverForce = 65f;
+    public float hoverHeight = 3.5f;
+    private float powerInput;
+    private float turnInput;
 
     // Use this for initialization
     void Start()
@@ -13,7 +18,11 @@ public class Hover : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void Update() {
+       
+    }
+
+    void FixedUpdate()
     {
 
         Vector3 leftRear = transform.TransformPoint(new Vector3(-0.5f, -0.5f, -0.5f));
@@ -23,10 +32,15 @@ public class Hover : MonoBehaviour
 
         bool bLeftRear, bRightRear, bLeftFront, bRightFront;
 
-        bLeftRear = Physics.Raycast(leftRear + 0.1f * transform.up, -transform.up, 1.0f);
-        bRightRear = Physics.Raycast(rightRear + 0.1f * transform.up, -transform.up, 1.0f);
-        bLeftFront = Physics.Raycast(leftFront + 0.1f * transform.up, -transform.up, 1.0f);
-        bRightFront = Physics.Raycast(rightFront + 0.1f * transform.up, -transform.up, 1.0f);
+        RaycastHit hitLeftRear;
+        RaycastHit hitRightRear;
+        RaycastHit hitLeftFront;
+        RaycastHit hitRightFront;
+
+        bLeftRear = Physics.Raycast(leftRear + 0.1f * transform.up, -transform.up, out hitLeftRear, hoverHeight);
+        bRightRear = Physics.Raycast(rightRear + 0.1f * transform.up, -transform.up, out hitRightRear, hoverHeight);
+        bLeftFront = Physics.Raycast(leftFront + 0.1f * transform.up, -transform.up, out hitLeftFront, hoverHeight);
+        bRightFront = Physics.Raycast(rightFront + 0.1f * transform.up, -transform.up, out hitRightFront, hoverHeight);
 
         Debug.DrawRay(leftRear, -transform.up, bLeftRear ? Color.red : Color.black);
         Debug.DrawRay(rightRear, -transform.up, bRightRear ? Color.red : Color.black);
@@ -35,13 +49,28 @@ public class Hover : MonoBehaviour
 
         // Suspension
         if (bLeftRear)
-            GetComponent<Rigidbody>().AddForceAtPosition(fMag * Vector3.up, leftRear);
+        {
+            float proportionalHeight = (hoverHeight - hitLeftRear.distance) / hoverHeight;
+            Vector3 appliedHoverForce = Vector3.up * proportionalHeight * hoverForce;
+            GetComponent<Rigidbody>().AddForceAtPosition(appliedHoverForce, leftRear);
+        }
         if (bRightRear)
-            GetComponent<Rigidbody>().AddForceAtPosition(fMag * Vector3.up, rightRear);
+        {
+            float proportionalHeight = (hoverHeight - hitRightRear.distance) / hoverHeight;
+            Vector3 appliedHoverForce = Vector3.up * proportionalHeight * hoverForce;
+            GetComponent<Rigidbody>().AddForceAtPosition(appliedHoverForce, rightRear);
+        }
         if (bLeftFront)
-            GetComponent<Rigidbody>().AddForceAtPosition(fMag * Vector3.up, leftFront);
+        {
+            float proportionalHeight = (hoverHeight - hitLeftFront.distance) / hoverHeight;
+            Vector3 appliedHoverForce = Vector3.up * proportionalHeight * hoverForce;
+            GetComponent<Rigidbody>().AddForceAtPosition(appliedHoverForce, leftFront);
+        }
         if (bRightFront)
-            GetComponent<Rigidbody>().AddForceAtPosition(fMag * Vector3.up, rightFront);
-
+        {
+            float proportionalHeight = (hoverHeight - hitRightFront.distance) / hoverHeight;
+            Vector3 appliedHoverForce = Vector3.up * proportionalHeight * hoverForce;
+            GetComponent<Rigidbody>().AddForceAtPosition(appliedHoverForce, rightFront);
+        }
     }
 }
