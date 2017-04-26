@@ -45,9 +45,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Editor\CrossPlatformInput\CrossPlatformInputInitialize.cs" />
-     <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
-     <None Include="Assets\Standard Assets\Cameras\CameraGuidelines.txt" />
+     <Compile Include="Assets\SimpleCarNitroSystem\Editor\CrossPlatformInput\CrossPlatformInputInitialize.cs" />
+     <None Include="Assets\SimpleCarNitroSystem\Car Assets\Car\Shaders\DiffuseReflectiveShader.shader" />
+     <None Include="Assets\SimpleCarNitroSystem\Car Assets\Car\Shaders\ReflectiveDiffuseSpecTransp.shader" />
+     <None Include="Assets\SimpleCarNitroSystem\Car Assets\Car\Shaders\ReflectiveDiffuseSpec.shader" />
+     <None Include="Assets\SimpleCarNitroSystem\Car Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
+     <None Include="Assets\SimpleCarNitroSystem\Car Assets\Car\Shaders\ProjectorLight.shader" />
+     <None Include="Assets\SimpleCarNitroSystem\README.txt" />
+     <None Include="Assets\SimpleCarNitroSystem\Car Assets\Car\CarGuidelines.txt" />
+     <None Include="Assets\SimpleCarNitroSystem\Car Assets\Car\Shaders\ProjectorMultiply.shader" />
  <Reference Include="UnityEditor.Advertisements">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Advertisements/Editor/UnityEditor.Advertisements.dll</HintPath>
  </Reference>
