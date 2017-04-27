@@ -1,61 +1,32 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
-
-[System.Serializable]
-public class AxleInfo
-{
-    public WheelCollider leftWheel;
-    public WheelCollider rightWheel;
-    public bool motor;
-    public bool steering;
-}
 
 public class Motor : MonoBehaviour
 {
-    public List<AxleInfo> axleInfos;
-    public float maxMotorTorque;
-    public float maxSteeringAngle;
+    public Vector3 certerOfMass = Vector3.zero;
+    public WheelCollider frontLeftWheel;
+    public WheelCollider frontRightWheel;
 
-    // finds the corresponding visual wheel
-    // correctly applies the transform
-    public void ApplyLocalPositionToVisuals(WheelCollider collider)
-    {
-        if (collider.transform.childCount == 0)
-        {
-            return;
-        }
+    public float speed = 100;
+    public float maxSteerAngle = 30;
 
-        Transform visualWheel = collider.transform.GetChild(0);
+    private float motorForce = 0;
 
-        Vector3 position;
-        Quaternion rotation;
-        collider.GetWorldPose(out position, out rotation);
-
-        //visualWheel.transform.position = position;
-        //visualWheel.transform.rotation = rotation;
-        
+    void Start() {
+        gameObject.GetComponent<Rigidbody>().centerOfMass = certerOfMass;
     }
 
-    public void FixedUpdate()
+    void FixedUpdate()
     {
-        float motor = maxMotorTorque * Input.GetAxis("Vertical");
-        float steering = maxSteeringAngle * Input.GetAxis("Horizontal");
+        motorForce = Input.GetAxis("Vertical") * speed;
+        frontLeftWheel.motorTorque = motorForce;
+        frontRightWheel.motorTorque = motorForce;
 
-        foreach (AxleInfo axleInfo in axleInfos)
-        {
-            if (axleInfo.steering)
-            {
-                axleInfo.leftWheel.steerAngle = steering;
-                axleInfo.rightWheel.steerAngle = steering;
-            }
-            if (axleInfo.motor)
-            {
-                axleInfo.leftWheel.motorTorque = motor;
-                axleInfo.rightWheel.motorTorque = motor;
-            }
-            ApplyLocalPositionToVisuals(axleInfo.leftWheel);
-            ApplyLocalPositionToVisuals(axleInfo.rightWheel);
-        }
+
+        float rotation = Input.GetAxis("Horizontal") * maxSteerAngle;
+        frontLeftWheel.steerAngle = rotation;
+        frontLeftWheel.steerAngle = rotation;
+        frontLeftWheel.transform.localEulerAngles = new Vector3(0, rotation, 90);
+        frontRightWheel.transform.localEulerAngles = new Vector3(0, rotation, 90);
     }
 }
