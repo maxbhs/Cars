@@ -13,7 +13,7 @@ public class Hover : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
 		
 		Vector3 leftRear = transform.TransformPoint(new Vector3(-0.5f, -0.5f, -0.5f));
 		Vector3 rightRear = transform.TransformPoint(new Vector3(0.5f, -0.5f, -0.5f));
@@ -26,11 +26,23 @@ public class Hover : MonoBehaviour {
 		Physics.Raycast(rightRear + 0.1f * transform.up, -transform.up, out hRightRear);
 		Physics.Raycast(leftFront + 0.1f * transform.up, -transform.up, out hLeftFront);
 		Physics.Raycast(rightFront + 0.1f * transform.up, -transform.up, out hRightFront);
+
+        Debug.LogWarning(hLeftRear.distance.ToString("0.00") + "," + hRightRear.distance.ToString("0.00") + "," + hLeftFront.distance.ToString("0.00") + "," + hRightFront.distance.ToString("0.00"));
 		
 		Debug.DrawRay(leftRear, -transform.up, (hLeftRear.distance < 1.0f)?Color.red:Color.black);
 		Debug.DrawRay(rightRear, -transform.up, (hRightRear.distance < 1.0f)?Color.red:Color.black);
 		Debug.DrawRay(leftFront, -transform.up, (hLeftFront.distance < 1.0f)?Color.red:Color.black);
 		Debug.DrawRay(rightFront, -transform.up, (hRightFront.distance < 1.0f)?Color.red:Color.black);
+
+        if ((hLeftFront.distance < 1.0f) && (hRightFront.distance < 1.0f) && (hLeftRear.distance < 1.0f) && (hRightRear.distance < 1.0f) &&(hLeftFront.distance > 0.0f) && (hRightFront.distance > 0.0f) && (hLeftRear.distance > 0.0f) && (hRightRear.distance > 0.0f))
+        {
+            GetComponent<Rigidbody>().drag = 1.0f;
+            GetComponent<Rigidbody>().angularDrag = 3.0f;
+        }
+        else {
+            GetComponent<Rigidbody>().drag = 0f;
+            GetComponent<Rigidbody>().angularDrag = 0.0f;
+        }
 		
 		// Suspension
 		if(hLeftRear.distance < 1.0f)
@@ -43,9 +55,9 @@ public class Hover : MonoBehaviour {
 			GetComponent<Rigidbody>().AddForceAtPosition((1.0f - hRightFront.distance) * fMag * hRightFront.normal, rightFront);
 		
 		// Impulse
-		if((hLeftFront.distance < 1.0f) && (hRightFront.distance < 1.0f))
+        if ((hLeftFront.distance < 1.0f) && (hRightFront.distance < 1.0f) && (hLeftFront.distance > 0.0f) && (hRightFront.distance > 0.0f))
 			GetComponent<Rigidbody>().AddForceAtPosition(impulseMag * Input.GetAxis("Vertical") * transform.forward, 
-														transform.position - 0.5f * transform.up);
+														transform.position - 0.4f * transform.up);
 													 
 		// Rotation
 		GetComponent<Rigidbody>().AddTorque(rotationMag * Input.GetAxis("Horizontal") * transform.up);
