@@ -13,27 +13,28 @@ public class Jump : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate() {
 
 
         //JUMP AND DOUBLE JUMP
         if (Input.GetMouseButtonDown(1) && njumps > 0)
         {
-            gameObject.GetComponent<Rigidbody>().AddForceAtPosition(jumpForce* Vector3.up, transform.position);
+            gameObject.GetComponent<Rigidbody>().AddForceAtPosition(jumpForce * Vector3.up, transform.position);
             --njumps;
+            
         }
         //SPEED BOOST
-        else if (Input.GetMouseButtonDown(0))
+        else if (Input.GetMouseButton(0))
         {
             gameObject.GetComponent<Rigidbody>().AddForceAtPosition(boostForce * transform.forward,
-                                                        transform.position - 0.6f * transform.up);
+                                                        transform.position - 0.7f * transform.up);
         }
         //FREESTYLA
         if (Hover.onAir) {
             if (Input.GetAxis("Horizontal") != 0) {
                 if (Input.GetKey(KeyCode.LeftShift))
                 {
-                    gameObject.GetComponent<Rigidbody>().AddTorque(rotationForce * Input.GetAxis("Horizontal") * transform.forward);
+                    gameObject.GetComponent<Rigidbody>().AddTorque(rotationForce * Input.GetAxis("Horizontal") * - transform.forward);
                 }
                 else
                 {

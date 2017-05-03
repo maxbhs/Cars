@@ -10,7 +10,7 @@ public class Hover : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		GetComponent<Rigidbody>().centerOfMass = new Vector3(0.0f, -0.4f, 0.0f);
+		GetComponent<Rigidbody>().centerOfMass = new Vector3(0.0f, -0.7f, 0.0f);
 	}
 	
 	// Update is called once per frame
@@ -43,8 +43,8 @@ public class Hover : MonoBehaviour {
         }
         else {
             onAir = true;
-            GetComponent<Rigidbody>().drag = 0f;
-            GetComponent<Rigidbody>().angularDrag = 0.0f;
+            GetComponent<Rigidbody>().drag = 0.0f;
+            //GetComponent<Rigidbody>().angularDrag = 3.0f;
         }
 		
 		// Suspension
@@ -60,14 +60,14 @@ public class Hover : MonoBehaviour {
 		// Impulse
         if ((hLeftFront.distance < 1.0f) && (hRightFront.distance < 1.0f) && (hLeftFront.distance > 0.0f) && (hRightFront.distance > 0.0f))
 			GetComponent<Rigidbody>().AddForceAtPosition(impulseMag * Input.GetAxis("Vertical") * transform.forward, 
-														transform.position - 0.6f * transform.up);
+														transform.position - 0.9f * transform.up);
 													 
 		// Rotation
         if ((hLeftFront.distance < 1.0f) && (hRightFront.distance < 1.0f) && (hLeftFront.distance > 0.0f) && (hRightFront.distance > 0.0f))
 		    GetComponent<Rigidbody>().AddTorque(rotationMag * Input.GetAxis("Horizontal") * transform.up);
 		
 		// Traction
-		GetComponent<Rigidbody>().AddForce(-0.1f * Vector3.Dot(GetComponent<Rigidbody>().velocity, transform.forward) * transform.right);
+        GetComponent<Rigidbody>().AddForce(-0.3f * Vector3.Dot(GetComponent<Rigidbody>().velocity, transform.right) * transform.right);
 	
 	}
 }
