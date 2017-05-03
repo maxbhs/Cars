@@ -30,7 +30,7 @@ public class Jump : MonoBehaviour {
                                                         transform.position - 0.7f * transform.up);
         }
         //FREESTYLA
-        if (Hover.onAir) {
+        if (Hover.onAir && Input.GetKey(KeyCode.Space)) {
             if (Input.GetAxis("Horizontal") != 0) {
                 if (Input.GetKey(KeyCode.LeftShift))
                 {
@@ -47,7 +47,7 @@ public class Jump : MonoBehaviour {
             }
         }
         //LAND
-        else
+        else if (!Hover.onAir)
         {
             njumps = 1;
         }
