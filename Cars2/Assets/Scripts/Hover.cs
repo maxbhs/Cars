@@ -10,7 +10,7 @@ public class Hover : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		GetComponent<Rigidbody>().centerOfMass = new Vector3(0.0f, -1.4f, 0.0f);
+		GetComponent<Rigidbody>().centerOfMass = new Vector3(0.0f, -0.6f, 0.0f);
 	}
 	
 	// Update is called once per frame
@@ -60,7 +60,7 @@ public class Hover : MonoBehaviour {
 		// Impulse
         if ((hLeftFront.distance < 1.0f) && (hRightFront.distance < 1.0f) && (hLeftFront.distance > 0.0f) && (hRightFront.distance > 0.0f))
 			GetComponent<Rigidbody>().AddForceAtPosition(impulseMag * Input.GetAxis("Vertical") * transform.forward, 
-														transform.position - 1.1f * transform.up);
+														transform.position - 0.7f * transform.up);
 													 
 		// Rotation
         if ((hLeftFront.distance < 1.0f) && (hRightFront.distance < 1.0f) && (hLeftFront.distance > 0.0f) && (hRightFront.distance > 0.0f))

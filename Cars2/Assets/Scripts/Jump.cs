@@ -27,7 +27,7 @@ public class Jump : MonoBehaviour {
         else if (Input.GetMouseButton(0))
         {
             gameObject.GetComponent<Rigidbody>().AddForceAtPosition(boostForce * transform.forward,
-                                                        transform.position - 1.1f * transform.up);
+                                                        transform.position - 0.7f * transform.up);
         }
         //FREESTYLA
         if (Hover.onAir) {
