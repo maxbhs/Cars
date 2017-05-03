@@ -6,10 +6,11 @@ public class Hover : MonoBehaviour {
 	public float fMag = 10.0f;
 	public float impulseMag = 1.0f;
 	public float rotationMag = 3.0f;
+    static public bool onAir = false;
 
 	// Use this for initialization
 	void Start () {
-		GetComponent<Rigidbody>().centerOfMass = new Vector3(0.0f, -0.9f, 0.0f);
+		GetComponent<Rigidbody>().centerOfMass = new Vector3(0.0f, -0.4f, 0.0f);
 	}
 	
 	// Update is called once per frame
@@ -36,10 +37,12 @@ public class Hover : MonoBehaviour {
 
         if ((hLeftFront.distance < 1.0f) && (hRightFront.distance < 1.0f) && (hLeftRear.distance < 1.0f) && (hRightRear.distance < 1.0f) &&(hLeftFront.distance > 0.0f) && (hRightFront.distance > 0.0f) && (hLeftRear.distance > 0.0f) && (hRightRear.distance > 0.0f))
         {
+            onAir = false;
             GetComponent<Rigidbody>().drag = 1.0f;
             GetComponent<Rigidbody>().angularDrag = 3.0f;
         }
         else {
+            onAir = true;
             GetComponent<Rigidbody>().drag = 0f;
             GetComponent<Rigidbody>().angularDrag = 0.0f;
         }
@@ -60,10 +63,11 @@ public class Hover : MonoBehaviour {
 														transform.position - 0.6f * transform.up);
 													 
 		// Rotation
-		GetComponent<Rigidbody>().AddTorque(rotationMag * Input.GetAxis("Horizontal") * transform.up);
+        if ((hLeftFront.distance < 1.0f) && (hRightFront.distance < 1.0f) && (hLeftFront.distance > 0.0f) && (hRightFront.distance > 0.0f))
+		    GetComponent<Rigidbody>().AddTorque(rotationMag * Input.GetAxis("Horizontal") * transform.up);
 		
 		// Traction
-		//GetComponent<Rigidbody>().AddForce(-0.3f * Vector3.Dot(GetComponent<Rigidbody>().velocity, transform.forward) * transform.right);
+		GetComponent<Rigidbody>().AddForce(-0.1f * Vector3.Dot(GetComponent<Rigidbody>().velocity, transform.forward) * transform.right);
 	
 	}
 }
