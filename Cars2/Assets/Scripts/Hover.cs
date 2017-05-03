@@ -10,7 +10,7 @@ public class Hover : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		GetComponent<Rigidbody>().centerOfMass = new Vector3(0.0f, -0.6f, 0.0f);
+		GetComponent<Rigidbody>().centerOfMass = new Vector3(0.0f, -1.0f, 0.0f);
 	}
 	
 	// Update is called once per frame
@@ -35,7 +35,7 @@ public class Hover : MonoBehaviour {
 		Debug.DrawRay(leftFront, -transform.up, (hLeftFront.distance < 1.0f)?Color.red:Color.black);
 		Debug.DrawRay(rightFront, -transform.up, (hRightFront.distance < 1.0f)?Color.red:Color.black);
 
-        if ((hLeftFront.distance < 1.0f) && (hRightFront.distance < 1.0f) && (hLeftRear.distance < 1.0f) && (hRightRear.distance < 1.0f) &&(hLeftFront.distance > 0.0f) && (hRightFront.distance > 0.0f) && (hLeftRear.distance > 0.0f) && (hRightRear.distance > 0.0f))
+        if (((hLeftFront.distance < 1.0f) && (hLeftFront.distance > 0.0f)) || ((hRightFront.distance < 1.0f) && (hRightFront.distance > 0.0f)) || ((hLeftRear.distance < 1.0f) && (hLeftRear.distance > 0.0f)) || ((hRightRear.distance < 1.0f) && (hRightRear.distance > 0.0f)))
         {
             onAir = false;
             GetComponent<Rigidbody>().drag = 1.0f;
