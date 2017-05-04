@@ -4,8 +4,6 @@ using System.Collections;
 public class Hover : MonoBehaviour {
 	
 	public float fMag = 10.0f;
-	public float impulseMag = 1.0f;
-	public float rotationMag = 3.0f;
     static public bool onAir = false;
 
 	// Use this for initialization
@@ -28,7 +26,7 @@ public class Hover : MonoBehaviour {
 		Physics.Raycast(leftFront + 0.1f * transform.up, -transform.up, out hLeftFront);
 		Physics.Raycast(rightFront + 0.1f * transform.up, -transform.up, out hRightFront);
 
-        Debug.LogWarning(hLeftRear.distance.ToString("0.00") + "," + hRightRear.distance.ToString("0.00") + "," + hLeftFront.distance.ToString("0.00") + "," + hRightFront.distance.ToString("0.00"));
+        //Debug.LogWarning(hLeftRear.distance.ToString("0.00") + "," + hRightRear.distance.ToString("0.00") + "," + hLeftFront.distance.ToString("0.00") + "," + hRightFront.distance.ToString("0.00"));
 		
 		Debug.DrawRay(leftRear, -transform.up, (hLeftRear.distance < 1.0f)?Color.red:Color.black);
 		Debug.DrawRay(rightRear, -transform.up, (hRightRear.distance < 1.0f)?Color.red:Color.black);
@@ -51,24 +49,10 @@ public class Hover : MonoBehaviour {
 		if(hLeftRear.distance < 1.0f)
 			GetComponent<Rigidbody>().AddForceAtPosition((1.0f - hLeftRear.distance) * fMag * hLeftRear.normal, leftRear);
 		if(hRightRear.distance < 1.0f)
-			GetComponent<Rigidbody>().AddForceAtPosition((1.0f - hRightRear.distance) * fMag * hRightRear.normal, rightRear);
+            GetComponent<Rigidbody>().AddForceAtPosition((1.0f - hRightRear.distance) * fMag * hRightRear.normal, rightRear);
 		if(hLeftFront.distance < 1.0f)
-			GetComponent<Rigidbody>().AddForceAtPosition((1.0f - hLeftFront.distance) * fMag * hLeftFront.normal, leftFront);
+            GetComponent<Rigidbody>().AddForceAtPosition((1.0f - hLeftFront.distance) * fMag * hLeftFront.normal, leftFront);
 		if(hRightFront.distance < 1.0f)
-			GetComponent<Rigidbody>().AddForceAtPosition((1.0f - hRightFront.distance) * fMag * hRightFront.normal, rightFront);
-		
-		// Impulse
-        if ((hLeftFront.distance < 1.0f) && (hRightFront.distance < 1.0f) && (hLeftFront.distance > 0.0f) && (hRightFront.distance > 0.0f))
-			GetComponent<Rigidbody>().AddForceAtPosition(impulseMag * Input.GetAxis("Vertical") * transform.forward, 
-														transform.position - 0.7f * transform.up);
-													 
-		// Rotation
-        if ((hLeftFront.distance < 1.0f) && (hRightFront.distance < 1.0f) && (hLeftFront.distance > 0.0f) && (hRightFront.distance > 0.0f))
-		    GetComponent<Rigidbody>().AddTorque(rotationMag * Input.GetAxis("Horizontal") * transform.up);
-
-		
-		// Traction
-        GetComponent<Rigidbody>().AddForce(-0.3f * Vector3.Dot(GetComponent<Rigidbody>().velocity, transform.right) * transform.right);
-	
+            GetComponent<Rigidbody>().AddForceAtPosition((1.0f - hRightFront.distance) * fMag * hRightFront.normal, rightFront);	
 	}
 }
