@@ -36,7 +36,7 @@ public class Motor : MonoBehaviour {
         {
             boostMag = 2.0f;
             GetComponent<Rigidbody>().AddForceAtPosition(boostMag * impulseMag * transform.forward,
-                                                       transform.position - 0.7f * transform.up);
+                                                       transform.position - 0.6f * transform.up);
         }
         else boostMag = 1.0f;
 	
