@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/ese es.unity
+- path: Assets/definitiva.unity
   isLoaded: 1
   isActive: 1
