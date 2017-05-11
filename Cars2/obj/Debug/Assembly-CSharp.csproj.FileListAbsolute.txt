@@ -19,3 +19,8 @@ D:\Documents\UPC\2016-2017 Q2\VJ\3DGame\Cars\Cars2\Temp\bin\Debug\UnityEngine.Ne
 D:\Documents\UPC\2016-2017 Q2\VJ\3DGame\Cars\Cars2\obj\Debug\Assembly-CSharp.csprojResolveAssemblyReference.cache
 D:\Documents\UPC\2016-2017 Q2\VJ\3DGame\Cars\Cars2\obj\Debug\Assembly-CSharp.dll
 D:\Documents\UPC\2016-2017 Q2\VJ\3DGame\Cars\Cars2\obj\Debug\Assembly-CSharp.pdb
+D:\Documents\UPC\2016-2017 Q2\VJ\3DGame\Cars\Cars2\Temp\bin\Debug\KDTree.dll
+D:\Documents\UPC\2016-2017 Q2\VJ\3DGame\Cars\Cars2\Temp\bin\Debug\pb_Stl.dll
+D:\Documents\UPC\2016-2017 Q2\VJ\3DGame\Cars\Cars2\Temp\bin\Debug\ProBuilderCore-Unity5.dll
+D:\Documents\UPC\2016-2017 Q2\VJ\3DGame\Cars\Cars2\Temp\bin\Debug\ProBuilderMeshOps-Unity5.dll
+D:\Documents\UPC\2016-2017 Q2\VJ\3DGame\Cars\Cars2\Temp\bin\Debug\Triangle.dll

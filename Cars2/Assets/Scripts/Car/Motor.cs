@@ -1,20 +1,23 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Motor : MonoBehaviour {
+public class Motor : MonoBehaviour
+{
 
     public float impulseMag = 20.0f;
     public float rotationMag = 3.0f;
     public float boostMag = 1.0f;
     private float speed;
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void FixedUpdate () {
+    // Use this for initialization
+    void Start()
+    {
+
+    }
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
         // Impulse
 
         speed = Vector3.Dot(GetComponent<Rigidbody>().velocity, transform.forward);
@@ -39,6 +42,6 @@ public class Motor : MonoBehaviour {
                                                        transform.position - 0.6f * transform.up);
         }
         else boostMag = 1.0f;
-	
-	}
+
+    }
 }

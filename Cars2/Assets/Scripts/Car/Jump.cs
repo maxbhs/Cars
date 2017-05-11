@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Jump : MonoBehaviour {
 	
-	public float jumpMag = 400.0f;
+	public float jumpMag = 3000.0f;
     public float rotationMag = 30.0f;
     public int njumps = 1;
 
@@ -23,7 +23,8 @@ public class Jump : MonoBehaviour {
             
         }
         //FREESTYLA
-        if (Hover.onAir && Input.GetKey(KeyCode.Space)) {
+        //Debug.LogWarning(CarController.grounded);
+        if (!CarController.grounded && Input.GetKey(KeyCode.Space)) {
             if (Input.GetAxis("Horizontal") != 0) {
                 if (Input.GetKey(KeyCode.LeftShift))
                 {
@@ -40,7 +41,7 @@ public class Jump : MonoBehaviour {
             }
         }
         //LAND
-        else if (!Hover.onAir)
+        else if (CarController.grounded)
         {
             njumps = 1;
         }
