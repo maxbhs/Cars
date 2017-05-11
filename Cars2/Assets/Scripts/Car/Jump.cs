@@ -6,6 +6,7 @@ public class Jump : MonoBehaviour {
 	public float jumpMag = 3000.0f;
     public float rotationMag = 30.0f;
     public int njumps = 1;
+    public bool grounded;
 
 	// Use this for initialization
 	void Start () {
@@ -14,17 +15,19 @@ public class Jump : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate() {
 
+        grounded = CarController.grounded;
 
-        //JUMP AND DOUBLE JUMP
+        //JUMP AND DOUBLE JUMP AUTOFLIP
+       
         if (Input.GetMouseButtonDown(1) && njumps > 0)
         {
-            gameObject.GetComponent<Rigidbody>().AddForceAtPosition(jumpMag * Vector3.up, transform.position);
+            gameObject.GetComponent<Rigidbody>().AddForceAtPosition(jumpMag * transform.up, transform.position); ;
             --njumps;
-            
+
         }
+        
         //FREESTYLA
-        //Debug.LogWarning(CarController.grounded);
-        if (!CarController.grounded && Input.GetKey(KeyCode.Space)) {
+        if (!grounded && Input.GetKey(KeyCode.Space)) {
             if (Input.GetAxis("Horizontal") != 0) {
                 if (Input.GetKey(KeyCode.LeftShift))
                 {
@@ -41,7 +44,7 @@ public class Jump : MonoBehaviour {
             }
         }
         //LAND
-        else if (CarController.grounded)
+        else if (grounded)
         {
             njumps = 1;
         }
