@@ -9,6 +9,7 @@ public class SmoothFollow : MonoBehaviour
 
     // The target we are following
     public Transform target;
+    public Transform looktarget;
     // The distance in the x-z plane to the target
     public float distance = 10.0f;
     // the height we want the camera to be above the target
@@ -17,10 +18,13 @@ public class SmoothFollow : MonoBehaviour
     public float heightDamping = 2.0f;
     public float rotationDamping = 3.0f;
 
+    private bool press = false;
+    private int delay = 30;
+
     // Place the script in the Camera-Control group in the component menu
     [AddComponentMenu("Camera-Control/Smooth Follow")]
 
-    void LateUpdate()
+    void FixedUpdate()
     {
         // Early out if we don't have a target
         if (!target) return;
@@ -50,6 +54,25 @@ public class SmoothFollow : MonoBehaviour
         transform.position = new Vector3(transform.position.x, currentHeight, transform.position.z);
 
         // Always look at the target
-        transform.LookAt(target);
-    }
+        if (delay == 0)
+        {
+            if (Input.GetKey(KeyCode.Q))
+            {
+                if (!press)
+                {
+                    press = true;
+                    delay = 30;
+                }
+                else
+                {
+                    press = false;
+                    delay = 30;
+                }
+            }
+        }
+        else delay -= 1; 
+
+        if (press) transform.LookAt(looktarget);
+        else transform.LookAt(target);
+     }
 }

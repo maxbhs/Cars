@@ -4,13 +4,18 @@ using System.Collections;
 public class CarController : MonoBehaviour {
 
     Rigidbody body;
-    float deadZone = 0.1f;
+    float deadZone = 0.2f;
     static public bool grounded = true;
     public float groundedDrag = 3f;
     public float maxVelocity = 50;
     public float hoverForce = 1000;
     public float gravityForce = 1000f;
     public float hoverHeight = 1f;
+
+    public float boostFactor = 1.0f;
+    public float boostEnergy = 100f;
+    public float boostImpulse = 100000f;
+    private bool max = false;
 
     public float forwardAcceleration = 8000f;
     public float reverseAcceleration = 4000f;
@@ -33,6 +38,7 @@ public class CarController : MonoBehaviour {
 
     void FixedUpdate(){
 
+       
         // Main Thrust
         thrust = 0.0f;
         float acceleration = Input.GetAxis("Vertical");
@@ -46,6 +52,7 @@ public class CarController : MonoBehaviour {
         float turnAxis = Input.GetAxis("Horizontal");
         if (Mathf.Abs(turnAxis) > deadZone)
             turnValue = turnAxis;
+
         
         //Position
         Vector3 leftRear = transform.TransformPoint(new Vector3(-0.5f, -0.5f, -0.5f));
@@ -100,7 +107,7 @@ public class CarController : MonoBehaviour {
 
         cont = 0;
 
-        if (hLeftRear.distance < hoverHeight)
+        if (hLeftRear.distance < hoverHeight + 0.2f)
         {
             body.AddForceAtPosition(hLeftRear.normal * hoverForce * crLeftRear, leftRear);
             body.AddForceAtPosition(dLeftRear, leftRear);
@@ -112,7 +119,7 @@ public class CarController : MonoBehaviour {
         }
 
 
-        if (hRightRear.distance < hoverHeight)
+        if (hRightRear.distance < hoverHeight + 0.2f)
         {
             body.AddForceAtPosition(hRightRear.normal * hoverForce * crRightRear, rightRear);
             body.AddForceAtPosition(dRightRear, rightRear);
@@ -123,7 +130,7 @@ public class CarController : MonoBehaviour {
             cont = cont + 1;
         }
 
-        if (hLeftFront.distance < hoverHeight)
+        if (hLeftFront.distance < hoverHeight + 0.2f)
         {
             body.AddForceAtPosition(hLeftFront.normal * hoverForce * crLeftFront, leftFront);
             body.AddForceAtPosition(dLeftFront, leftFront);
@@ -135,7 +142,7 @@ public class CarController : MonoBehaviour {
         }
 
 
-        if (hRightFront.distance < hoverHeight)
+        if (hRightFront.distance < hoverHeight + 0.2f)
         {
             body.AddForceAtPosition(hRightFront.normal * hoverForce * crRightFront, rightFront);
             body.AddForceAtPosition(dRightFront, rightFront);
@@ -174,7 +181,7 @@ public class CarController : MonoBehaviour {
             body.drag = groundedDrag;
             // Handle Forward and Reverse forces
             if (Mathf.Abs(thrust) > 0)
-                body.AddForce(transform.forward * thrust);
+                if (!max) body.AddForce(transform.forward * thrust);
 
             // Handle Turn forces
             if (turnValue > 0)
@@ -186,7 +193,7 @@ public class CarController : MonoBehaviour {
                 body.AddRelativeTorque(Vector3.up * turnValue * turnStrength);
             }
             else {
-                body.AddForce(-0.5f * Vector3.Dot(GetComponent<Rigidbody>().velocity, transform.right) * transform.right);
+                body.AddForce(Vector3.Dot(GetComponent<Rigidbody>().velocity, transform.right) * transform.right);
             }
         }
         else
@@ -195,10 +202,20 @@ public class CarController : MonoBehaviour {
         
         }
 
-        // Limit max velocity
-        if (body.velocity.sqrMagnitude > (body.velocity.normalized * maxVelocity).sqrMagnitude)
+        if (Input.GetMouseButton(0) && boostEnergy > 0)
         {
-            body.velocity = body.velocity.normalized * maxVelocity;
+            boostFactor = 2.0f;
+            GetComponent<Rigidbody>().AddForceAtPosition(boostFactor * boostImpulse * transform.forward,
+                                                       transform.position - 1.0f * transform.up);
         }
+        else boostFactor = 1.0f;
+
+        // Limit max velocity
+        if (body.velocity.sqrMagnitude > (body.velocity.normalized * maxVelocity * boostFactor).sqrMagnitude)
+        {
+            //body.velocity = body.velocity.normalized * maxVelocity*boostFactor;
+            max = true;
+        }
+        else max = false;
     }
 }
