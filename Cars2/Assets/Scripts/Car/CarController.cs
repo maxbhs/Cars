@@ -242,9 +242,9 @@ public class CarController : MonoBehaviour {
             if (turbo < 100)
             {   
                 other.gameObject.SetActive(false);
-                if (turbo <= 66)
+                if (turbo <= 80)
                 {
-                    turbo = turbo + 34;
+                    turbo = turbo + 20;
                 }
                 else
                 {
