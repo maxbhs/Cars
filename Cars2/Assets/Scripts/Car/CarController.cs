@@ -4,10 +4,11 @@ using System.Collections;
 
 public class CarController : MonoBehaviour {
 
-    Rigidbody body;
+    static public Rigidbody body;
     float deadZone = 0.2f;
 
     public Text turboText;
+    public Text speedText;
 
     static public bool grounded = true;
     public float groundedDrag = 3f;
@@ -29,6 +30,7 @@ public class CarController : MonoBehaviour {
     float turnValue = 0f;
     private int cont = 0;
     private int turbo; //va de 0 a 100
+    private float speed;
     bool restarTurbo;
 
     //int layerMask;
@@ -36,7 +38,7 @@ public class CarController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         body = GetComponent<Rigidbody>();
-        body.centerOfMass = -Vector3.up;
+        body.centerOfMass = new Vector3(0.0f,-0.5f,0.0f);
         turbo = 40;
         SetTurboText();
         restarTurbo = true;
@@ -59,15 +61,22 @@ public class CarController : MonoBehaviour {
         // Turning
         turnValue = 0.0f;
         float turnAxis = Input.GetAxis("Horizontal");
-        if (Mathf.Abs(turnAxis) > deadZone)
-            turnValue = turnAxis;
+        if (Mathf.Abs(turnAxis) > deadZone){
+            if (Input.GetKey(KeyCode.LeftShift) ){
+                turnValue = turnAxis*2;
+            }
+            else{
+                turnValue = turnAxis;
+            }
+        }
+       
 
         
         //Position
-        Vector3 leftRear = transform.TransformPoint(new Vector3(-0.5f, -0.5f, -0.5f));
-        Vector3 rightRear = transform.TransformPoint(new Vector3(0.5f, -0.5f, -0.5f));
-        Vector3 leftFront = transform.TransformPoint(new Vector3(-0.5f, -0.5f, 0.5f));
-        Vector3 rightFront = transform.TransformPoint(new Vector3(0.5f, -0.5f, 0.5f));
+        Vector3 leftRear = transform.TransformPoint(new Vector3(-0.4f, -0.5f, -0.4f));
+        Vector3 rightRear = transform.TransformPoint(new Vector3(0.4f, -0.5f, -0.4f));
+        Vector3 leftFront = transform.TransformPoint(new Vector3(-0.4f, -0.5f, 0.4f));
+        Vector3 rightFront = transform.TransformPoint(new Vector3(0.4f, -0.5f, 0.4f));
 
        //Velocity at Position
         Vector3 vLeftRear = GetComponent<Rigidbody>().GetPointVelocity(leftRear);
@@ -84,7 +93,7 @@ public class CarController : MonoBehaviour {
         //Ratcast to determine compress ratio
         RaycastHit hLeftRear, hRightRear, hLeftFront, hRightFront;
 
-        Physics.Raycast(leftRear + 0.2f * transform.up, -transform.up, out hLeftRear);
+        Physics.Raycast(leftRear + 0.2f * transform.up , -transform.up, out hLeftRear);
         Physics.Raycast(rightRear + 0.2f * transform.up, -transform.up, out hRightRear);
         Physics.Raycast(leftFront + 0.2f * transform.up, -transform.up, out hLeftFront);
         Physics.Raycast(rightFront + 0.2f * transform.up, -transform.up, out hRightFront);
@@ -178,10 +187,11 @@ public class CarController : MonoBehaviour {
         }
         else if (cont == 0)
         {
-            body.AddForceAtPosition(-transform.up * gravityForce * 0.25f, leftRear);
-            body.AddForceAtPosition(-transform.up * gravityForce * 0.25f, rightRear);
-            body.AddForceAtPosition(-transform.up * gravityForce * 0.25f, leftFront);
-            body.AddForceAtPosition(-transform.up * gravityForce * 0.25f, rightFront);
+                body.AddForceAtPosition(-transform.up * gravityForce * 0.25f, leftRear);
+                body.AddForceAtPosition(-transform.up * gravityForce * 0.25f, rightRear);
+                body.AddForceAtPosition(-transform.up * gravityForce * 0.25f, leftFront);
+                body.AddForceAtPosition(-transform.up * gravityForce * 0.25f, rightFront);
+            
         }
 
             
@@ -190,20 +200,13 @@ public class CarController : MonoBehaviour {
             body.drag = groundedDrag;
             // Handle Forward and Reverse forces
             if (Mathf.Abs(thrust) > 0)
-                if (!max) body.AddForce(transform.forward * thrust);
+               body.AddForceAtPosition(transform.forward * thrust, transform.position - 0.6f * transform.up);
 
-            // Handle Turn forces
-            if (turnValue > 0)
-            {
-                body.AddRelativeTorque(Vector3.up * turnValue * turnStrength);
-            }
-            else if (turnValue < 0)
-            {
-                body.AddRelativeTorque(Vector3.up * turnValue * turnStrength);
-            }
-            else {
-                body.AddForce(Vector3.Dot(GetComponent<Rigidbody>().velocity, transform.right) * transform.right);
-            }
+          
+            body.AddRelativeTorque(Vector3.up * turnValue * turnStrength);
+            body.AddForce(-Vector3.Dot(GetComponent<Rigidbody>().velocity, transform.right) * transform.right); //Nose si hace algo
+            
+            
         }
         else
         {
@@ -215,7 +218,7 @@ public class CarController : MonoBehaviour {
         {
             boostFactor = 2.0f;
             GetComponent<Rigidbody>().AddForceAtPosition(boostFactor * boostImpulse * transform.forward,
-                                                       transform.position - 1.0f * transform.up);
+                                                       transform.position - 0.6f * transform.up);
 
             if (restarTurbo) //si usamos este booleano, el turbo dura el doble
             {
@@ -228,13 +231,8 @@ public class CarController : MonoBehaviour {
         }
         else boostFactor = 1.0f;
 
-        // Limit max velocity
-        if (body.velocity.sqrMagnitude > (body.velocity.normalized * maxVelocity * boostFactor).sqrMagnitude)
-        {
-            //body.velocity = body.velocity.normalized * maxVelocity*boostFactor;
-            max = true;
-        }
-        else max = false;
+        speed = body.velocity.sqrMagnitude;
+        SetSpeedText();
     }
 
     void OnTriggerEnter(Collider other)
@@ -259,6 +257,10 @@ public class CarController : MonoBehaviour {
 
     void SetTurboText ()
     {
-        turboText.text = "Turbo: " + turbo.ToString();
+       turboText.text = "Turbo: " + turbo.ToString();
+    }
+    void SetSpeedText()
+    {
+        speedText.text = "Speed: " + (body.velocity.sqrMagnitude).ToString("#.##");
     }
 }

@@ -26,6 +26,11 @@ public class SmoothFollow : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (!CarController.grounded)
+        {
+            rotationDamping = 0.0f;
+        }
+        else rotationDamping = 3.0f;
         // Early out if we don't have a target
         if (!target) return;
 
