@@ -1,10 +1,14 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class CarController : MonoBehaviour {
 
     Rigidbody body;
     float deadZone = 0.2f;
+
+    public Text turboText;
+
     static public bool grounded = true;
     public float groundedDrag = 3f;
     public float maxVelocity = 50;
@@ -24,6 +28,8 @@ public class CarController : MonoBehaviour {
     public float turnStrength = 1000f;
     float turnValue = 0f;
     private int cont = 0;
+    private int turbo; //va de 0 a 100
+    bool restarTurbo;
 
     //int layerMask;
 
@@ -31,6 +37,9 @@ public class CarController : MonoBehaviour {
 	void Start () {
         body = GetComponent<Rigidbody>();
         body.centerOfMass = -Vector3.up;
+        turbo = 40;
+        SetTurboText();
+        restarTurbo = true;
 
         //layerMask = 1 << LayerMask.NameToLayer("Vehicle");
         //layerMask = ~layerMask;
@@ -202,11 +211,20 @@ public class CarController : MonoBehaviour {
         
         }
 
-        if (Input.GetMouseButton(0) && boostEnergy > 0)
+        if (Input.GetMouseButton(0) && turbo > 0)
         {
             boostFactor = 2.0f;
             GetComponent<Rigidbody>().AddForceAtPosition(boostFactor * boostImpulse * transform.forward,
                                                        transform.position - 1.0f * transform.up);
+
+            if (restarTurbo) //si usamos este booleano, el turbo dura el doble
+            {
+                restarTurbo = false;
+                turbo = turbo - 1;
+                SetTurboText();
+            }
+            else restarTurbo = true;
+            
         }
         else boostFactor = 1.0f;
 
@@ -217,5 +235,30 @@ public class CarController : MonoBehaviour {
             max = true;
         }
         else max = false;
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Turbo"))
+        {
+            if (turbo < 100)
+            {   
+                other.gameObject.SetActive(false);
+                if (turbo <= 66)
+                {
+                    turbo = turbo + 34;
+                }
+                else
+                {
+                    turbo = turbo + (100 - turbo);
+                }
+                SetTurboText();
+            }
+        }
+    }
+
+    void SetTurboText ()
+    {
+        turboText.text = "Turbo: " + turbo.ToString();
     }
 }
