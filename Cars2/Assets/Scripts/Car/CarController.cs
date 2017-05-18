@@ -11,6 +11,7 @@ public class CarController : MonoBehaviour {
     public Text speedText;
 
     static public bool grounded = true;
+    public bool fliping;
     public float groundedDrag = 3f;
     public float maxVelocity = 50;
     public float hoverForce = 1000;
@@ -49,24 +50,48 @@ public class CarController : MonoBehaviour {
     void FixedUpdate(){
 
        
+        fliping = Jump.fliping;
         // Main Thrust
         thrust = 0.0f;
-        float acceleration = Input.GetAxis("Vertical");
-        if (acceleration > deadZone)
-            thrust = acceleration * forwardAcceleration;
-        else if (acceleration < -deadZone)
-            thrust = acceleration * reverseAcceleration;
+        if (!fliping)
+        {
+            float acceleration = Input.GetAxis("Vertical");
+            if (acceleration > deadZone)
+                thrust = acceleration * forwardAcceleration;
+            else if (acceleration < -deadZone)
+                thrust = acceleration * reverseAcceleration;
 
-        // Turning
-        turnValue = 0.0f;
-        float turnAxis = Input.GetAxis("Horizontal");
-        if (Mathf.Abs(turnAxis) > deadZone){
-            if (Input.GetKey(KeyCode.LeftShift) ){
-                turnValue = turnAxis*2;
+            // Turning
+            turnValue = 0.0f;
+            float turnAxis = Input.GetAxis("Horizontal");
+            if (Mathf.Abs(turnAxis) > deadZone)
+            {
+                if (Input.GetKey(KeyCode.LeftShift))
+                {
+                    turnValue = turnAxis * 2;
+                }
+                else
+                {
+                    turnValue = turnAxis;
+                }
             }
-            else{
-                turnValue = turnAxis;
+
+            if (Input.GetMouseButton(0) && turbo > 0)
+            {
+                boostFactor = 2.0f;
+                GetComponent<Rigidbody>().AddForceAtPosition(boostFactor * boostImpulse * transform.forward,
+                                                           transform.position - 0.6f * transform.up);
+
+                if (restarTurbo) //si usamos este booleano, el turbo dura el doble
+                {
+                    restarTurbo = false;
+                    turbo = turbo - 1;
+                    SetTurboText();
+                }
+                else restarTurbo = true;
+
             }
+            else boostFactor = 1.0f;
         }
        
 
@@ -181,10 +206,10 @@ public class CarController : MonoBehaviour {
         }
         else if (cont == 1 || cont == 2 || cont == 3) {
             
-                body.AddForceAtPosition(-Vector3.up * gravityForce * hLeftRear.distance * 0.25f, leftRear);
-                body.AddForceAtPosition(-Vector3.up * gravityForce * hRightRear.distance * 0.25f, rightRear);
-                body.AddForceAtPosition(-Vector3.up * gravityForce * hLeftFront.distance * 0.25f, leftFront);
-                body.AddForceAtPosition(-Vector3.up * gravityForce * hRightFront.distance * 0.25f, rightFront);
+                body.AddForceAtPosition(-Vector3.up * gravityForce * hLeftRear.distance * 0.2f, leftRear);
+                body.AddForceAtPosition(-Vector3.up * gravityForce * hRightRear.distance * 0.2f, rightRear);
+                body.AddForceAtPosition(-Vector3.up * gravityForce * hLeftFront.distance * 0.2f, leftFront);
+                body.AddForceAtPosition(-Vector3.up * gravityForce * hRightFront.distance * 0.2f, rightFront);
             
         }
         else if (cont == 0)
@@ -203,12 +228,14 @@ public class CarController : MonoBehaviour {
             if (Mathf.Abs(thrust) > 0)
                body.AddForceAtPosition(transform.forward * thrust, transform.position - 0.6f * transform.up);
 
-          
-            // Rotation
-		    body.AddTorque(turnValue * turnStrength * transform.up);
-		
-		    // Traction
-            body.AddForce(-0.1f*Vector3.Dot(body.velocity, transform.right) * transform.right);
+            if (body.velocity.magnitude > 7)
+            {
+                // Rotation
+                body.AddTorque(turnValue * turnStrength * transform.up);
+
+                // Traction
+                body.AddForce(-0.4f * Vector3.Dot(body.velocity, transform.right) * transform.right);
+            }
             
             
         }
@@ -217,23 +244,7 @@ public class CarController : MonoBehaviour {
                 body.drag = 0.1f;
            
         }
-
-        if (Input.GetMouseButton(0) && turbo > 0)
-        {
-            boostFactor = 2.0f;
-            GetComponent<Rigidbody>().AddForceAtPosition(boostFactor * boostImpulse * transform.forward,
-                                                       transform.position - 0.6f * transform.up);
-
-            if (restarTurbo) //si usamos este booleano, el turbo dura el doble
-            {
-                restarTurbo = false;
-                turbo = turbo - 1;
-                SetTurboText();
-            }
-            else restarTurbo = true;
-            
-        }
-        else boostFactor = 1.0f;
+   
 
         speed = body.velocity.sqrMagnitude;
         SetSpeedText();
@@ -265,6 +276,6 @@ public class CarController : MonoBehaviour {
     }
     void SetSpeedText()
     {
-        speedText.text = "Speed: " + (body.velocity.sqrMagnitude).ToString("#.##");
+        speedText.text = "Speed: " + (body.velocity.magnitude).ToString("#.##");
     }
 }

@@ -19,7 +19,6 @@ public class Ball : MonoBehaviour {
 
     void OnCollisionEnter(Collision collision)
     {
-        // Debug-draw all contact points and normals
         if (collision.gameObject.name == "Car")
         {
             if (first)
