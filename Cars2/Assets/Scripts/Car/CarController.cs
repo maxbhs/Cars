@@ -18,7 +18,6 @@ public class CarController : MonoBehaviour {
     public float hoverHeight = 1f;
 
     public float boostFactor = 1.0f;
-    public float boostEnergy = 100f;
     public float boostImpulse = 100000f;
     private bool max = false;
 
@@ -73,10 +72,10 @@ public class CarController : MonoBehaviour {
 
         
         //Position
-        Vector3 leftRear = transform.TransformPoint(new Vector3(-0.4f, -0.5f, -0.4f));
-        Vector3 rightRear = transform.TransformPoint(new Vector3(0.4f, -0.5f, -0.4f));
-        Vector3 leftFront = transform.TransformPoint(new Vector3(-0.4f, -0.5f, 0.4f));
-        Vector3 rightFront = transform.TransformPoint(new Vector3(0.4f, -0.5f, 0.4f));
+        Vector3 leftRear = transform.TransformPoint(new Vector3(-0.5f, -0.5f, -0.5f));
+        Vector3 rightRear = transform.TransformPoint(new Vector3(0.5f, -0.5f, -0.5f));
+        Vector3 leftFront = transform.TransformPoint(new Vector3(-0.5f, -0.5f, 0.5f));
+        Vector3 rightFront = transform.TransformPoint(new Vector3(0.5f, -0.5f, 0.5f));
 
        //Velocity at Position
         Vector3 vLeftRear = GetComponent<Rigidbody>().GetPointVelocity(leftRear);
@@ -174,24 +173,26 @@ public class CarController : MonoBehaviour {
 
         if (cont == 4) {
             grounded = false;
-            body.AddForceAtPosition(-Vector3.up * gravityForce * 0.25f, leftRear);
-            body.AddForceAtPosition(-Vector3.up * gravityForce * 0.25f,rightRear);
-            body.AddForceAtPosition(-Vector3.up * gravityForce * 0.25f, leftFront);
-            body.AddForceAtPosition(-Vector3.up * gravityForce * 0.25f, rightFront);
+                body.AddForceAtPosition(-Vector3.up * gravityForce * 0.25f, leftRear);
+                body.AddForceAtPosition(-Vector3.up * gravityForce * 0.25f, rightRear);
+                body.AddForceAtPosition(-Vector3.up * gravityForce * 0.25f, leftFront);
+                body.AddForceAtPosition(-Vector3.up * gravityForce * 0.25f, rightFront);
+            
         }
         else if (cont == 1 || cont == 2 || cont == 3) {
-            body.AddForceAtPosition(-Vector3.up * gravityForce * 0.25f, leftRear);
-            body.AddForceAtPosition(-Vector3.up * gravityForce * 0.25f, rightRear);
-            body.AddForceAtPosition(-Vector3.up * gravityForce * 0.25f, leftFront);
-            body.AddForceAtPosition(-Vector3.up * gravityForce * 0.25f, rightFront);
+            
+                body.AddForceAtPosition(-Vector3.up * gravityForce * hLeftRear.distance * 0.25f, leftRear);
+                body.AddForceAtPosition(-Vector3.up * gravityForce * hRightRear.distance * 0.25f, rightRear);
+                body.AddForceAtPosition(-Vector3.up * gravityForce * hLeftFront.distance * 0.25f, leftFront);
+                body.AddForceAtPosition(-Vector3.up * gravityForce * hRightFront.distance * 0.25f, rightFront);
+            
         }
         else if (cont == 0)
         {
-                body.AddForceAtPosition(-transform.up * gravityForce * 0.25f, leftRear);
-                body.AddForceAtPosition(-transform.up * gravityForce * 0.25f, rightRear);
-                body.AddForceAtPosition(-transform.up * gravityForce * 0.25f, leftFront);
-                body.AddForceAtPosition(-transform.up * gravityForce * 0.25f, rightFront);
-            
+                body.AddForceAtPosition(-transform.up * gravityForce * 0.25f , leftRear);
+                body.AddForceAtPosition(-transform.up * gravityForce * 0.25f , rightRear);
+                body.AddForceAtPosition(-transform.up * gravityForce * 0.25f , leftFront);
+                body.AddForceAtPosition(-transform.up * gravityForce * 0.25f , rightFront);
         }
 
             
@@ -203,15 +204,18 @@ public class CarController : MonoBehaviour {
                body.AddForceAtPosition(transform.forward * thrust, transform.position - 0.6f * transform.up);
 
           
-            body.AddRelativeTorque(Vector3.up * turnValue * turnStrength);
-            body.AddForce(-Vector3.Dot(GetComponent<Rigidbody>().velocity, transform.right) * transform.right); //Nose si hace algo
+            // Rotation
+		    body.AddTorque(turnValue * turnStrength * transform.up);
+		
+		    // Traction
+            body.AddForce(-0.1f*Vector3.Dot(body.velocity, transform.right) * transform.right);
             
             
         }
         else
         {
-            body.drag = 0.1f;
-        
+                body.drag = 0.1f;
+           
         }
 
         if (Input.GetMouseButton(0) && turbo > 0)

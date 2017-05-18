@@ -5,6 +5,9 @@ public class Ball : MonoBehaviour {
 
     Rigidbody ball;
     Rigidbody car;
+    float speed;
+    Vector3 direction;
+    bool first;
 
 	// Use this for initialization
     void Start()
@@ -18,9 +21,16 @@ public class Ball : MonoBehaviour {
     {
         // Debug-draw all contact points and normals
         if (collision.gameObject.name == "Car")
+        {
+            if (first)
             {
-                //ball.AddForceAtPosition(Vector3.Dot(ball.velocity, car.velocity) * ball.centerOfMass, transform.position, ForceMode.Impulse);
+                speed = (-ball.velocity + car.velocity).magnitude;
+                direction = (ball.position - (car.position + transform.up * -0.5f)).normalized;
+                ball.velocity = (direction * speed);
+                first = false;
             }
+        }
+        else first = true;
     }
 
 	// Update is called once per frame

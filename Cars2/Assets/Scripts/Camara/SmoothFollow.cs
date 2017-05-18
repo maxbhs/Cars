@@ -30,7 +30,7 @@ public class SmoothFollow : MonoBehaviour
         {
             rotationDamping = 0.0f;
         }
-        else rotationDamping = 3.0f;
+        else rotationDamping = 5.0f;
         // Early out if we don't have a target
         if (!target) return;
 
