@@ -8,12 +8,19 @@ public class Ball : MonoBehaviour {
     float speed;
     Vector3 direction;
     bool first;
+    Vector3 originalP;
+    Quaternion originalR;
+    CarController resetC = new CarController();
+
 
 	// Use this for initialization
     void Start()
     {
         ball = GetComponent<Rigidbody>();
         car = CarController.body;
+        originalP = transform.position;
+        originalR = transform.rotation;
+
 
     }
 
@@ -35,5 +42,25 @@ public class Ball : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate () {
         car = CarController.body;
+
+        if (ball.position.z >= 336.76)
+        {
+            Reset();
+            resetC.Reset();
+        }
+        else if (ball.position.z <= 43.16)
+        {
+            Reset();
+            resetC.Reset();
+        }
 	}
+
+    void Reset ()
+    {
+        transform.position = originalP;
+        transform.rotation = originalR;
+        ball.velocity = new Vector3 (0,0,0);
+        ball.angularVelocity = new Vector3(0, 0, 0);
+
+    }
 }

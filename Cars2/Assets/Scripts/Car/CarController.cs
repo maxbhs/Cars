@@ -33,19 +33,25 @@ public class CarController : MonoBehaviour {
     private float speed;
     bool restarTurbo;
 
+    Vector3 originalP;
+    Quaternion originalR;
+
     //int layerMask;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         body = GetComponent<Rigidbody>();
         body.centerOfMass = new Vector3(0.0f,-0.5f,0.0f);
         turbo = 40;
         SetTurboText();
         restarTurbo = true;
 
+        //originalP = body.transform.position;
+        //originalR = body.transform.rotation;
+
         //layerMask = 1 << LayerMask.NameToLayer("Vehicle");
         //layerMask = ~layerMask;
-	}
+    }
 
     void FixedUpdate(){
 
@@ -254,6 +260,7 @@ public class CarController : MonoBehaviour {
     {
         if (other.gameObject.CompareTag("Turbo"))
         {
+            
             if (turbo < 100)
             {   
                 other.gameObject.SetActive(false);
@@ -277,5 +284,16 @@ public class CarController : MonoBehaviour {
     void SetSpeedText()
     {
         speedText.text = "Speed: " + (body.velocity.magnitude).ToString("#.##");
+    }
+
+    public void Reset()
+    {
+        turbo = 40;
+        //SetTurboText();
+        body.transform.position = new Vector3(373.8f, 1.07f, 277.1f); //se tiene que poner a mano, nose porque...
+        body.transform.rotation = new Quaternion(0, 180, 0, 0);
+        body.velocity = new Vector3(0, 0, 0);
+        body.angularVelocity = new Vector3(0, 0, 0);
+        
     }
 }
