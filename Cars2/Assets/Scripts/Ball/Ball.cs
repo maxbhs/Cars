@@ -12,10 +12,11 @@ public class Ball : MonoBehaviour {
     int delay = 5;
     Vector3 originalP;
     Quaternion originalR;
-    
+
+    public CarController other;
 
 
-	// Use this for initialization
+    // Use this for initialization
     void Start()
     {
         ball = GetComponent<Rigidbody>();
@@ -30,13 +31,13 @@ public class Ball : MonoBehaviour {
     {
         if (collision.gameObject.name == "Car")
         {
-            Physics.IgnoreCollision(car.GetComponent<Collider>(), ball.GetComponent<Collider>(), true);
+            //Physics.IgnoreCollision(car.GetComponent<Collider>(), ball.GetComponent<Collider>(), true);
 
             
-            heading = ball.position - car.position;
-            distance = heading.magnitude;
-            direction = heading / distance;
-            ball.velocity = ball.velocity.magnitude * direction;  
+            //heading = ball.position - car.position;
+            //distance = heading.magnitude;
+            //direction = heading / distance;
+            //ball.velocity = ball.velocity.magnitude * direction;  
         }        
     }
 
@@ -48,6 +49,7 @@ public class Ball : MonoBehaviour {
         if (ball.position.z >= 336.76)
         {
             Reset();
+            
         }
         else if (ball.position.z <= 43.16)
         {
@@ -62,11 +64,15 @@ public class Ball : MonoBehaviour {
         ball.velocity = new Vector3 (0,0,0);
         ball.angularVelocity = new Vector3(0, 0, 0);
 
-        CarController.turbo = 40;
+        other = GameObject.FindObjectOfType(typeof(CarController)) as CarController;
+
+        other.Reset();
+
+        /*other.GetComponent("CarController") = 40;
         car.transform.position = new Vector3(373.8f, 1.07f, 277.1f); //se tiene que poner a mano, nose porque...
         car.transform.rotation = new Quaternion(0, 180, 0, 0);
         car.velocity = new Vector3(0, 0, 0);
-        car.angularVelocity = new Vector3(0, 0, 0);
+        car.angularVelocity = new Vector3(0, 0, 0);*/
 
     }
 }

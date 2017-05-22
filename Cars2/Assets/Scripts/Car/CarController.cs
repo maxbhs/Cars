@@ -17,14 +17,20 @@ public class CarController : MonoBehaviour {
     static public int turbo; //va de 0 a 100
     bool restarTurbo;
 
-	// Use this for initialization
-	void Start () {
+    Vector3 originalP;
+    Quaternion originalR;
+
+    // Use this for initialization
+    void Start () {
         turbo = 40;
         SetTurboText();
         restarTurbo = true;
         forwardAcceleration = CarPhysics.forwardAcceleration;
         reverseAcceleration = CarPhysics.reverseAcceleration;
-	}
+
+        originalP = transform.position;
+        originalR = transform.rotation;
+    }
 	
 	// Update is called once per frame
 	void FixedUpdate () {
@@ -97,5 +103,16 @@ public class CarController : MonoBehaviour {
     void SetTurboText()
     {
         turboText.text = "Turbo: " + turbo.ToString();
+    }
+
+    public void Reset()
+    {
+        turbo = 40;
+        SetTurboText();
+        transform.position = originalP;
+        transform.rotation = originalR;
+        GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
+        GetComponent<Rigidbody>().angularVelocity = new Vector3(0, 0, 0);
+
     }
 }
