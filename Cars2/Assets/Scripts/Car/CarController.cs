@@ -5,7 +5,7 @@ using System.Collections;
 public class CarController : MonoBehaviour {
 
     static public Rigidbody body;
-    float deadZone = 0.2f;
+    float deadZone = 0.0f;
 
     public Text turboText;
     public Text speedText;
@@ -49,7 +49,7 @@ public class CarController : MonoBehaviour {
         //originalP = body.transform.position;
         //originalR = body.transform.rotation;
 
-        //layerMask = 1 << LayerMask.NameToLayer("Vehicle");
+        //layerMask = 1 << LayerMask.NameToLayer("EyeBall");
         //layerMask = ~layerMask;
     }
 
@@ -234,14 +234,11 @@ public class CarController : MonoBehaviour {
             if (Mathf.Abs(thrust) > 0)
                body.AddForceAtPosition(transform.forward * thrust, transform.position - 0.6f * transform.up);
 
-            if (body.velocity.magnitude > 7)
-            {
                 // Rotation
                 body.AddTorque(turnValue * turnStrength * transform.up);
 
                 // Traction
                 body.AddForce(-0.4f * Vector3.Dot(body.velocity, transform.right) * transform.right);
-            }
             
             
         }

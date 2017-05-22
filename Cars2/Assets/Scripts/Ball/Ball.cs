@@ -6,8 +6,10 @@ public class Ball : MonoBehaviour {
     Rigidbody ball;
     Rigidbody car;
     float speed;
+    Vector3 heading;
+    float distance;
     Vector3 direction;
-    bool first;
+    int delay = 5;
     Vector3 originalP;
     Quaternion originalR;
     CarController resetC = new CarController();
@@ -28,21 +30,22 @@ public class Ball : MonoBehaviour {
     {
         if (collision.gameObject.name == "Car")
         {
-            if (first)
-            {
-                speed = (-ball.velocity + car.velocity).magnitude;
-                direction = (ball.position - (car.position + transform.up * -0.5f)).normalized;
-                ball.velocity = (direction * speed);
-                first = false;
-            }
-        }
-        else first = true;
+            Physics.IgnoreCollision(car.GetComponent<Collider>(), ball.GetComponent<Collider>(), true);
+
+           
+            speed = (car.velocity - ball.velocity).magnitude;
+            heading = ball.position - car.position;
+            distance = heading.magnitude;
+            direction = heading / distance;
+            ball.velocity += (direction * speed * 0.5f);
+        }        
     }
 
 	// Update is called once per frame
 	void FixedUpdate () {
         car = CarController.body;
-
+        Physics.IgnoreCollision(car.GetComponent<Collider>(), ball.GetComponent<Collider>(), false);
+      
         if (ball.position.z >= 336.76)
         {
             Reset();
