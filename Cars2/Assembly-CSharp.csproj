@@ -55,6 +55,7 @@
      <Compile Include="Assets\Scripts\Ball\Ball.cs" />
      <Compile Include="Assets\Scripts\Camara\SmoothFollow.cs" />
      <Compile Include="Assets\Scripts\Car\CarController.cs" />
+     <Compile Include="Assets\Scripts\Car\CarPhysics.cs" />
      <Compile Include="Assets\Scripts\Car\FPSDisplay.cs" />
      <Compile Include="Assets\Scripts\Car\Jump.cs" />
      <Compile Include="Assets\Scripts\Turbo\Rotator.cs" />

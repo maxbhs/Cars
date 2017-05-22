@@ -25,35 +25,35 @@ public class Jump : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate() {
 
-        grounded = CarController.grounded;
+        grounded = CarPhysics.grounded;
 
         //JUMP AND DOUBLE JUMP 
 
         if (!fliping)
         {
-            if (Input.GetMouseButtonDown(1) && airJumps > 0)
+         
+
+            
+            //FREESTYLA
+            if (grounded && Input.GetKey(KeyCode.Space) && Input.GetMouseButtonDown(1))
             {
-              
-                    body.AddForceAtPosition(jumpMag * transform.up, transform.position);
-                    airJumps -= 1;
+                if (Input.GetAxis("Vertical") > 0)
+                {
+                    dir = Input.GetAxis("Horizontal");
+                    fliping = true;
+                }
+            }
+            else if (Input.GetMouseButtonDown(1) && airJumps > 0)
+            {
+
+                body.AddForceAtPosition(jumpMag * transform.up, transform.position);
+                airJumps -= 1;
             }
 
             if (grounded)
             {
                 airJumps = 1;
 
-            }
-
-            
-
-
-            //FREESTYLA
-            if (grounded && Input.GetKey(KeyCode.Space)){
-                if (Input.GetAxis("Vertical") > 0)
-                {
-                    dir = Input.GetAxis("Horizontal");
-                    fliping = true;
-                }
             }
             else if (!grounded && Input.GetKey(KeyCode.Space))
             {
@@ -97,7 +97,7 @@ public class Jump : MonoBehaviour {
                 }
             }
             contadortemps += 1;
-            if (contadortemps > 34)
+            if (contadortemps > 34 && grounded)
             {
                 fliping = false;
                 contadortemps = 0;
