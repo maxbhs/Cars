@@ -14,6 +14,7 @@ public class Ball : MonoBehaviour {
     Quaternion originalR;
 
     public CarController other;
+    public LevelManager LM;
 
 
     // Use this for initialization
@@ -49,11 +50,12 @@ public class Ball : MonoBehaviour {
         if (ball.position.z >= 336.76)
         {
             Reset();
-            
+            LM.blueGol();
         }
         else if (ball.position.z <= 43.16)
         {
             Reset();
+            LM.orangeGol();
         }
 	}
 
