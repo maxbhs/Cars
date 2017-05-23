@@ -6,7 +6,7 @@ public class Jump : MonoBehaviour {
     Rigidbody body;
 	public float jumpMag = 3000.0f;
     public float rotationMag = 30.0f;
-    public int airJumps = 1;
+    public int airJumps = 2;
     public float impulseFlip = 25f;
     static public bool fliping = false;
     public int delay = 15;
@@ -35,7 +35,7 @@ public class Jump : MonoBehaviour {
 
             
             //FREESTYLA
-            if (grounded && Input.GetKey(KeyCode.Space) && Input.GetMouseButtonDown(1))
+            if (grounded && Input.GetKey(KeyCode.Space) && Input.GetMouseButton(1))
             {
                 if (Input.GetAxis("Vertical") > 0)
                 {
@@ -43,7 +43,7 @@ public class Jump : MonoBehaviour {
                     fliping = true;
                 }
             }
-            else if (Input.GetMouseButtonDown(1) && airJumps > 0)
+            else if (Input.GetKey(KeyCode.Space) && airJumps > 0)
             {
 
                 body.AddForceAtPosition(jumpMag * transform.up, transform.position);
@@ -52,10 +52,10 @@ public class Jump : MonoBehaviour {
 
             if (grounded)
             {
-                airJumps = 1;
+                airJumps = 2;
 
             }
-            else if (!grounded && Input.GetKey(KeyCode.Space))
+            else if (!grounded && Input.GetMouseButton(1))
             {
                 //MANUAL FLIPS
                 if (Input.GetAxis("Horizontal") != 0)
