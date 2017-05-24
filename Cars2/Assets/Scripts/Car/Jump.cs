@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Jump : MonoBehaviour {
 
-    Rigidbody body;
+    
 	public float jumpMag = 3000.0f;
     public float rotationMag = 30.0f;
     public int airJumps = 2;
@@ -19,7 +19,7 @@ public class Jump : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        body = GetComponent<Rigidbody>();
+        
 	}
 	
 	// Update is called once per frame
@@ -27,26 +27,20 @@ public class Jump : MonoBehaviour {
 
         grounded = CarPhysics.grounded;
 
-        //JUMP AND DOUBLE JUMP 
+        //JUMP DOUBLE JUMP AND AUTOFLIP 
 
         if (!fliping)
         {
-         
-
-            
             //FREESTYLA
-            if (grounded && Input.GetKey(KeyCode.Space) && Input.GetMouseButton(1))
+            if (grounded && Input.GetKey(KeyCode.Space) && Input.GetMouseButton(1) && Input.GetAxis("Vertical") > 0)
             {
-                if (Input.GetAxis("Vertical") > 0)
-                {
-                    dir = Input.GetAxis("Horizontal");
-                    fliping = true;
-                }
+                dir = Input.GetAxis("Horizontal");
+                fliping = true;
             }
             else if (Input.GetKey(KeyCode.Space) && airJumps > 0)
             {
 
-                body.AddForceAtPosition(jumpMag * transform.up, transform.position);
+                GetComponent<Rigidbody>().AddForceAtPosition(jumpMag * transform.up, transform.position);
                 airJumps -= 1;
             }
 
@@ -62,16 +56,16 @@ public class Jump : MonoBehaviour {
                 {
                     if (Input.GetKey(KeyCode.LeftShift))
                     {
-                        body.AddTorque(rotationMag * Input.GetAxis("Horizontal") * -transform.forward);
+                        GetComponent<Rigidbody>().AddTorque(rotationMag * Input.GetAxis("Horizontal") * -transform.forward);
                     }
                     else
                     {
-                        body.AddTorque(rotationMag * Input.GetAxis("Horizontal") * transform.up);
+                        GetComponent<Rigidbody>().AddTorque(rotationMag * Input.GetAxis("Horizontal") * transform.up);
                     }
                 }
                 if (Input.GetAxis("Vertical") != 0)
                 {
-                    body.AddTorque(rotationMag * Input.GetAxis("Vertical") * transform.right);
+                    GetComponent<Rigidbody>().AddTorque(rotationMag * Input.GetAxis("Vertical") * transform.right);
                 }
             }
         }
@@ -84,16 +78,16 @@ public class Jump : MonoBehaviour {
             {
                 if (dir == 0)
                 {
-                    if (contadortemps < 11) body.AddForce(2500f * 2f * Vector3.up);
-                    if (contadortemps < 34) body.AddForceAtPosition(impulseFlip * impulseFlip * 2.0f * direction, transform.position);
-                    if (contadortemps < 34) body.AddTorque(rotationMag * 10 * transform.right);
+                    if (contadortemps < 11) GetComponent<Rigidbody>().AddForce(2500f * 2f * Vector3.up);
+                    if (contadortemps < 34) GetComponent<Rigidbody>().AddForceAtPosition(impulseFlip * impulseFlip * 2.0f * direction, transform.position);
+                    if (contadortemps < 34) GetComponent<Rigidbody>().AddTorque(rotationMag * 10 * transform.right);
                 }
                 else
                 {
-                    if (contadortemps < 11) body.AddForce(3500f * 2f * Vector3.up);
-                    if (contadortemps < 34) body.AddForceAtPosition(impulseFlip * impulseFlip * 2.0f * direction, transform.position);
-                    if (contadortemps < 34) body.AddTorque(rotationMag * 10 * dir * transform.up);
-                    if (contadortemps < 34) body.AddTorque(rotationMag * 10 * transform.right);
+                    if (contadortemps < 11) GetComponent<Rigidbody>().AddForce(3500f * 2f * Vector3.up);
+                    if (contadortemps < 34) GetComponent<Rigidbody>().AddForceAtPosition(impulseFlip * impulseFlip * 2.0f * direction, transform.position);
+                    if (contadortemps < 34) GetComponent<Rigidbody>().AddTorque(rotationMag * 10 * dir * transform.up);
+                    if (contadortemps < 34) GetComponent<Rigidbody>().AddTorque(rotationMag * 10 * transform.right);
                 }
             }
             contadortemps += 1;

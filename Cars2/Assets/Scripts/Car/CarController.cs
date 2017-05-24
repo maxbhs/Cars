@@ -4,19 +4,24 @@ using System.Collections;
 
 public class CarController : MonoBehaviour {
 
+    public Text speedText;
     public Text turboText;
 
-    float deadZone = 0.0f;
-    bool fliping;
     static public float thrust = 0.0f;
     static public float turnValue = 0.0f;
+    static public float boostFactor = 0.0f;
+    
+
     float forwardAcceleration;
     float reverseAcceleration;
-    float boostFactor = 1.0f;
-    float boostImpulse = 2000f;
+    
     static public int turbo; //va de 0 a 100
-    bool restarTurbo;
+    bool restartTurbo;
 
+    private float deadZone = 0.0f;
+    private bool fliping;
+    private float speed;
+    
     Vector3 originalP;
     Quaternion originalR;
 
@@ -24,19 +29,22 @@ public class CarController : MonoBehaviour {
     void Start () {
         turbo = 40;
         SetTurboText();
-        restarTurbo = true;
+        restartTurbo = true;
         forwardAcceleration = CarPhysics.forwardAcceleration;
         reverseAcceleration = CarPhysics.reverseAcceleration;
-
+        
         originalP = transform.position;
         originalR = transform.rotation;
     }
 	
 	// Update is called once per frame
 	void FixedUpdate () {
+        
+        
+
         fliping = Jump.fliping;
-        // Main Thrust
         thrust = 0.0f;
+        turnValue = 0.0f;
         if (!fliping)
         {
             float acceleration = Input.GetAxis("Vertical");
@@ -46,7 +54,6 @@ public class CarController : MonoBehaviour {
                 thrust = acceleration * reverseAcceleration;
 
             // Turning
-            turnValue = 0.0f;
             float turnAxis = Input.GetAxis("Horizontal");
             if (Mathf.Abs(turnAxis) > deadZone)
             {
@@ -63,20 +70,23 @@ public class CarController : MonoBehaviour {
             if (Input.GetMouseButton(0) && turbo > 0)
             {
                 boostFactor = 2.0f;
-                GetComponent<Rigidbody>().AddForceAtPosition(boostFactor * boostImpulse * transform.forward,
-                                                           transform.position - 0.6f * transform.up);
-
-                if (restarTurbo) //si usamos este booleano, el turbo dura el doble
+                if (restartTurbo) //si usamos este booleano, el turbo dura el doble
                 {
-                    restarTurbo = false;
+                    restartTurbo = false;
                     turbo = turbo - 1;
                     SetTurboText();
                 }
-                else restarTurbo = true;
+                else restartTurbo = true;
 
             }
-            else boostFactor = 1.0f;
+            else boostFactor = 0.0f;
         }
+        else {
+            boostFactor = 0.0f;
+        }
+
+        speed = GetComponent<Rigidbody>().velocity.sqrMagnitude;
+        SetSpeedText();
 	}
 
     void OnTriggerEnter(Collider other)
@@ -98,6 +108,11 @@ public class CarController : MonoBehaviour {
                 SetTurboText();
             }
         }
+    }
+
+    void SetSpeedText()
+    {
+        speedText.text = "Speed: " + (GetComponent<Rigidbody>().velocity.magnitude).ToString("#.##");
     }
 
     void SetTurboText()

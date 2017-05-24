@@ -26,7 +26,7 @@ public class SmoothFollow : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!CarPhysics.grounded && Jump.fliping)
+        if (!CarPhysics.grounded || Jump.fliping)
         {
             rotationDamping = 0.0f;
         }

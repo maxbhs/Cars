@@ -1,11 +1,9 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using System.Collections;
 
-public class CarPhysics : MonoBehaviour {
+public class CarPhysicsIA : MonoBehaviour {
 
-
-    static public bool grounded = true;
+	static public bool grounded = true;
     public float groundedDrag = 3f;
     
     public float hoverForce = 2000;
@@ -33,9 +31,9 @@ public class CarPhysics : MonoBehaviour {
     void FixedUpdate()
     {
 
-        thrust = CarController.thrust;
-        turnValue = CarController.turnValue;
-        boostFactor = CarController.boostFactor;
+        thrust = CarControllerIA.thrust;
+        turnValue = CarControllerIA.turnValue;
+        boostFactor = CarControllerIA.boostFactor;
 
         //Position
         Vector3 leftRear = transform.TransformPoint(new Vector3(-0.5f, -0.5f, -0.5f));
@@ -90,7 +88,7 @@ public class CarPhysics : MonoBehaviour {
 
         rodas = 0;
 
-        if (hLeftRear.distance < hoverHeight + 0.2f)
+        if (hLeftRear.distance < hoverHeight + 0.25f)
         {
             GetComponent<Rigidbody>().AddForceAtPosition(hLeftRear.normal * hoverForce * crLeftRear, leftRear);
             GetComponent<Rigidbody>().AddForceAtPosition(dLeftRear, leftRear);
@@ -102,7 +100,7 @@ public class CarPhysics : MonoBehaviour {
         }
 
 
-        if (hRightRear.distance < hoverHeight + 0.2f)
+        if (hRightRear.distance < hoverHeight + 0.25f)
         {
             GetComponent<Rigidbody>().AddForceAtPosition(hRightRear.normal * hoverForce * crRightRear, rightRear);
             GetComponent<Rigidbody>().AddForceAtPosition(dRightRear, rightRear);
@@ -113,7 +111,7 @@ public class CarPhysics : MonoBehaviour {
             rodas = rodas + 1;
         }
 
-        if (hLeftFront.distance < hoverHeight + 0.2f)
+        if (hLeftFront.distance < hoverHeight + 0.25f)
         {
             GetComponent<Rigidbody>().AddForceAtPosition(hLeftFront.normal * hoverForce * crLeftFront, leftFront);
             GetComponent<Rigidbody>().AddForceAtPosition(dLeftFront, leftFront);
@@ -125,7 +123,7 @@ public class CarPhysics : MonoBehaviour {
         }
 
 
-        if (hRightFront.distance < hoverHeight + 0.2f)
+        if (hRightFront.distance < hoverHeight + 0.25f)
         {
             GetComponent<Rigidbody>().AddForceAtPosition(hRightFront.normal * hoverForce * crRightFront, rightFront);
             GetComponent<Rigidbody>().AddForceAtPosition(dRightFront, rightFront);
