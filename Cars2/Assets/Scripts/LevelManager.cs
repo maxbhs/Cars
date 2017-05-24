@@ -9,12 +9,15 @@ public class LevelManager : MonoBehaviour {
     public Text orangeM;
     public Text timer;
     public Text ganador;
+    public GameObject Mcar;
 
     public float time;
 
     private int blue, orange;
     private string min, sec;
     private bool finished;
+
+    public static TypeOfGame tog;
 
     // Use this for initialization
     void Start () {
@@ -25,6 +28,15 @@ public class LevelManager : MonoBehaviour {
         orangeM.text = orange.ToString();
 
         finished = false;
+
+        //aqui se elege el modelo del coche segun el ToG
+        tog = GameObject.FindObjectOfType(typeof(TypeOfGame)) as TypeOfGame;
+        if (tog.YM() == 2)
+        {
+            Mcar.transform.GetChild(0).gameObject.SetActive(false);
+            Mcar.transform.GetChild(1).gameObject.SetActive(true);
+        }
+         
 
     }
 
