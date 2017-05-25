@@ -20,22 +20,27 @@ public class CarControllerIA : MonoBehaviour {
     Vector3 originalP;
     Quaternion originalR;
 
-    //target Position
-    Vector3 target;
+    Vector3 netposition;
+    Vector3 homenetposition;
 
-    Vector3 hnet;
     Vector3 hball;
+    Vector3 hnet;
+    Vector3 hhomenet;
     Vector3 hballnet;
     Vector3 htarget;
 
-    float dball, dnet, dballnet, dtarget;
+    float dball, dnet, dhomenet, dballnet, dtarget;
 
     Vector3 directionball;
     Vector3 directionnet;
+    Vector3 directionhomenet;
     Vector3 directarget;
+    Vector3 directionballnet;
 
     private float acceleration;
     private float turnAxis;
+
+    public ArrayList arrayList = new ArrayList();
 
 	// Use this for initialization
 	void Start () {
@@ -51,44 +56,46 @@ public class CarControllerIA : MonoBehaviour {
 
         acceleration = 0.0f;
         turnAxis = 0.0f;
-
-        //Direccio porteria, distancia porteria
-        hnet = net.transform.position - transform.position;
+        
+        //Direccio coche centre porteria contraria
+        netposition = net.transform.position + new Vector3(0.0f, 25.6f, 0.0f);
+        hnet = netposition - transform.position;
         dnet = hnet.magnitude;
         directionnet = hnet / dnet;
-        directionnet.y = 0.0f;
+
+        //Direccio coche centre porteria casa
+        homenetposition = homenet.transform.position + new Vector3(0.0f, 25.6f, 0.0f);
+        hhomenet = homenetposition - transform.position;
+        dhomenet = hhomenet.magnitude;
+        directionhomenet = hhomenet / dhomenet;
 
         //Direccio bola, distancia bola
         hball = ball.transform.position - transform.position;
         dball = hball.magnitude;
         directionball = hball / dball;
-        directionball.y = 0.0f;
 
-        //Distancia entre portaria i bola
-        hballnet = net.transform.position - ball.transform.position;
-        dballnet = hballnet.magnitude;
- 
-
+        //Distancia bola i centre portaria contraria
+        hballnet = netposition - ball.transform.position;
+        dballnet = hballnet.magnitude; 
+        
         if (dballnet+10 < dnet) {
             if (dnet > 150)
             {
-                target = ball.transform.position;
+                getBall();
             }
             else {
                 if (goalPosition(transform.position))
                 {
-                    target = ball.transform.position;
+                    getBall();
                 }
                 else {
-                    target = findPosition();
+                    getPosition(findGoalPosition());
                 }
             }
         }
         else {
-            target = homenet.transform.position;
+            getPosition(homenetposition);     
         }
-
-        getTarget(target);
 
         if (acceleration >= 0.0f)
             thrust = acceleration * forwardAcceleration;
@@ -105,30 +112,45 @@ public class CarControllerIA : MonoBehaviour {
 	}
 
     public bool goalPosition(Vector3 position) {
+       
+        
+
         return false;
     }
 
-    public Vector3 findPosition() {
+    public Vector3 findGoalPosition() {
         return ball.transform.position;
     }
 
-    public void getTarget(Vector3 position) {
-        htarget = position - transform.position;
+    public void getPosition(Vector3 position) { 
+    
+    }
+
+    public void getBall() {
+
+        Vector3 position = ball.transform.position + ball.GetComponent<Rigidbody>().velocity;
+
+        htarget = ball.transform.position - transform.position;
         dtarget = htarget.magnitude;
         directarget = htarget / dtarget;
         directarget.y = 0.0f;
 
-        //acceleration = 1.0f;
-        float angle = Vector3.Angle(htarget, transform.forward);
-        
+        Debug.DrawRay(transform.position, transform.forward * 5.0f, Color.blue);
+        Debug.DrawRay(transform.position, directarget * 5.0f, Color.red);
 
-       /* if (transform.forward.x > directarget.x)
+        float angle = Mathf.DeltaAngle(Mathf.Atan2(transform.forward.z, transform.forward.x) * Mathf.Rad2Deg,
+                                Mathf.Atan2(directarget.z, directarget.x) * Mathf.Rad2Deg);
+
+        if (ball.transform.position.y < 5.0f)
         {
-            turnAxis = 1.0f;
+            acceleration = 1.0f;
         }
-        else if (transform.forward.z < directarget.z)
-            turnAxis = -1.0f;
-        else turnAxis = 0.0f;*/
+
+        if (angle > 0.0f) turnAxis = -1.0f;
+        else if (angle < 0.0f) turnAxis = 1.0f;
+        else turnAxis = 0.0f;
+
+        
     }
 
     public void Reset()

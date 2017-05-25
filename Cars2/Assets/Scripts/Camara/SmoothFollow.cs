@@ -20,6 +20,7 @@ public class SmoothFollow : MonoBehaviour
 
     private bool press = false;
     private int delay = 30;
+    private int cont = 0;
 
     // Place the script in the Camera-Control group in the component menu
     [AddComponentMenu("Camera-Control/Smooth Follow")]
@@ -75,9 +76,12 @@ public class SmoothFollow : MonoBehaviour
                 }
             }
         }
-        else delay -= 1; 
+        else delay -= 1;
 
         if (press) transform.LookAt(looktarget);
-        else transform.LookAt(target);
+        else
+        {
+            transform.LookAt(target);
+        }
      }
 }
