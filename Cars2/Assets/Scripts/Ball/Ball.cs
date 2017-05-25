@@ -46,13 +46,13 @@ public class Ball : MonoBehaviour {
         if (transform.position.z >= 336.76)
         {
             Reset();
-            LM.blueGol();
+            LM.orangeGol();
             
         }
         else if (transform.position.z <= 43.16)
         {
             Reset();
-            LM.orangeGol();
+            LM.blueGol();
         }
 	}
 

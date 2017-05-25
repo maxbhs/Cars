@@ -10,6 +10,7 @@ public class LevelManager : MonoBehaviour {
     public Text timer;
     public Text ganador;
     public GameObject Mcar;
+    public GameObject Menemy;
 
     public float time;
 
@@ -29,14 +30,29 @@ public class LevelManager : MonoBehaviour {
 
         finished = false;
 
-        //aqui se elege el modelo del coche segun el ToG
+        //aqui se elege el modelo de los coches segun el ToG
         tog = GameObject.FindObjectOfType(typeof(TypeOfGame)) as TypeOfGame;
         if (tog.YM() == 2)
         {
             Mcar.transform.GetChild(0).gameObject.SetActive(false);
             Mcar.transform.GetChild(1).gameObject.SetActive(true);
         }
-         
+        else if (tog.YM() == 3)
+        {
+            Mcar.transform.GetChild(0).gameObject.SetActive(false);
+            Mcar.transform.GetChild(2).gameObject.SetActive(true);
+        }
+        if (tog.EM() == 2)
+        {
+            Menemy.transform.GetChild(0).gameObject.SetActive(false);
+            Menemy.transform.GetChild(1).gameObject.SetActive(true);
+        }
+        else if (tog.EM() == 3)
+        {
+            Menemy.transform.GetChild(0).gameObject.SetActive(false);
+            Menemy.transform.GetChild(2).gameObject.SetActive(true);
+        }
+
 
     }
 
@@ -84,6 +100,7 @@ public class LevelManager : MonoBehaviour {
     {
         finished = true;
         timer.color = Color.yellow;
+        timer.text = "0:00.00";
         if (blue > orange)
         {
             ganador.text = "   BLUE TEAM WINS";

@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/MenuTeamCar.unity
+- path: Assets/1VS1.unity
   isLoaded: 1
   isActive: 1

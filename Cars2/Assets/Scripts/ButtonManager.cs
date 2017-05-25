@@ -17,9 +17,14 @@ public class ButtonManager : MonoBehaviour {
         Application.Quit();
     }
 
-    public void Back()
+    public void BacktoMenu()
     {
         SceneManager.LoadScene("Menu");
+    }
+
+    public void BacktoYTM()
+    {
+        SceneManager.LoadScene("MenuTeamCar");
     }
 
     public void GM_NW(int gm) //puts the game mode in the new game
@@ -32,6 +37,12 @@ public class ButtonManager : MonoBehaviour {
     {
         tog = GameObject.FindObjectOfType(typeof(TypeOfGame)) as TypeOfGame;
         tog.SetYourModel(ym);
+    }
+
+    public void EM_NW(int em) //puts the enemy model in the new game
+    {
+        tog = GameObject.FindObjectOfType(typeof(TypeOfGame)) as TypeOfGame;
+        tog.SetenemyModel(em);
     }
 
     public void cargarL()
