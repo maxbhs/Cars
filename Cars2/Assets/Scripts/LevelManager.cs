@@ -9,6 +9,8 @@ public class LevelManager : MonoBehaviour {
     public Text orangeM;
     public Text timer;
     public Text ganador;
+    public Text overtime;
+    public Text exit;
     public GameObject Mcar;
     public GameObject Menemy;
 
@@ -16,7 +18,7 @@ public class LevelManager : MonoBehaviour {
 
     private int blue, orange;
     private string min, sec;
-    private bool finished;
+    private bool finished, draw;
 
     public static TypeOfGame tog;
 
@@ -28,6 +30,7 @@ public class LevelManager : MonoBehaviour {
         blueM.text = blue.ToString();
         orangeM.text = orange.ToString();
 
+        draw = false;
         finished = false;
 
         //aqui se elege el modelo de los coches segun el ToG
@@ -78,20 +81,36 @@ public class LevelManager : MonoBehaviour {
 	
 	public void blueGol ()
     {
-        if (!finished)
+        if (!finished || draw)
         {
             ++blue;
             blueM.text = blue.ToString();
+            if (draw)
+            {
+                overtime.text = "";
+                ganador.text = "   BLUE TEAM WINS";
+                ganador.color = Color.blue;
+                exit.text = "Press Esc to exit";
+                draw = false;
+            }
         }
+
         
     }
 
     public void orangeGol()
     {
-        if (!finished)
+        if (!finished || draw)
         {
             ++orange;
             orangeM.text = orange.ToString();
+            if (draw)
+            {
+                overtime.text = "";
+                ganador.text = "ORANGE TEAM WINS";
+                exit.text = "Press Esc to exit";
+                draw = false;
+            }
         }
         
     }
@@ -112,8 +131,8 @@ public class LevelManager : MonoBehaviour {
         }
         else
         {
-            ganador.text = "             DRAW";
-            ganador.color = Color.black;
+            draw = true;
+            overtime.text = "Overtime";
         }
 
     }
