@@ -6,6 +6,9 @@ public class CarController : MonoBehaviour {
 
     public Text speedText;
     public Text turboText;
+    public ParticleEmitter flame1;
+    public ParticleEmitter flame2;
+    public GameObject audioObj;
 
     static public float thrust = 0.0f;
     static public float turnValue = 0.0f;
@@ -35,6 +38,10 @@ public class CarController : MonoBehaviour {
         
         originalP = transform.position;
         originalR = transform.rotation;
+
+        audioObj.SetActive(false);
+        flame1.emit = false;
+        flame2.emit = false;
     }
 	
 	// Update is called once per frame
@@ -70,6 +77,9 @@ public class CarController : MonoBehaviour {
             if (Input.GetMouseButton(0) && turbo > 0)
             {
                 boostFactor = 2.0f;
+                flame1.emit = true;
+                flame2.emit = true;
+                audioObj.SetActive(true);
                 if (restartTurbo) //si usamos este booleano, el turbo dura el doble
                 {
                     restartTurbo = false;
@@ -79,7 +89,13 @@ public class CarController : MonoBehaviour {
                 else restartTurbo = true;
 
             }
-            else boostFactor = 0.0f;
+            else
+            {
+                boostFactor = 0.0f;
+                audioObj.SetActive(false);
+                flame1.emit = false;
+                flame2.emit = false;
+            }
         }
         else {
             boostFactor = 0.0f;
