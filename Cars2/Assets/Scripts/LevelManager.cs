@@ -124,10 +124,12 @@ public class LevelManager : MonoBehaviour {
         {
             ganador.text = "   BLUE TEAM WINS";
             ganador.color = Color.blue;
+            exit.text = "Press Esc to exit";
         }
         else if (orange > blue)
         {
             ganador.text = "ORANGE TEAM WINS";
+            exit.text = "Press Esc to exit";
         }
         else
         {

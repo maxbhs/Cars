@@ -16,7 +16,6 @@ public class JumpIA : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
 	}
 	
 	// Update is called once per frame
@@ -55,7 +54,5 @@ public class JumpIA : MonoBehaviour {
         {
             contadortemps = 0;
         }
-
-        Debug.Log(goalPosition);
 	}
 }

@@ -30,6 +30,9 @@ public class CarControllerIA : MonoBehaviour {
     Vector3 hballnet;
     Vector3 htarget;
 
+    int delayencallat;
+    Vector3 prevpos;
+
     float dball, dnet, dhomenet, dballnet, dtarget;
 
     Vector3 directionball;
@@ -48,6 +51,8 @@ public class CarControllerIA : MonoBehaviour {
 
         originalP = transform.position;
         originalR = transform.rotation;
+
+        delayencallat = 0;
 	}
 	
 	// Update is called once per frame
@@ -81,19 +86,25 @@ public class CarControllerIA : MonoBehaviour {
         if (dballnet < dnet) {
             if (dnet > 150)
             {
-                //Vector3 position = ball.transform.position + ball.GetComponent<Rigidbody>().velocity;
-                getPosition(ball.transform.position);
+                Vector3 position = ball.transform.position;
+                if (ball.transform.position.y < 5.0f)
+                    getPosition(position);
+                else
+                    getPosition(findGoalPosition());
             }
             else {
                 if (isAGoalPosition())
                 {
                     //JUMP TO GOAL
-                    //Vector3 position = ball.transform.position + ball.GetComponent<Rigidbody>().velocity;
-                    getPosition(ball.transform.position);
+                    Vector3 position = ball.transform.position;
+                    getPosition(position);
                 }
                 else {
-                    //getPosition(findGoalPosition());
-                    getPosition(ball.transform.position);
+                    Vector3 position = ball.transform.position;
+                    if (ball.transform.position.y < 5.0)
+                        getPosition(position);
+                    else
+                        getPosition(findGoalPosition());
                 }
             }
         }
@@ -114,6 +125,9 @@ public class CarControllerIA : MonoBehaviour {
                 turnValue = turnAxis;
         }
 
+        if (delayencallat > 0) delayencallat -= 1;
+        prevpos = transform.position;
+
         Debug.DrawRay(transform.position, transform.forward * 5.0f, Color.blue);
         Debug.DrawRay(transform.position, directarget * 5.0f, Color.red);
         Debug.DrawRay(ball.transform.position, directionballnet * 10.0f, Color.green);
@@ -123,13 +137,12 @@ public class CarControllerIA : MonoBehaviour {
     public bool isAGoalPosition() {
         if (transform.forward == directionball && directionball == directionballnet)
             goalPosition = true;
-        else goalPosition = false; ;
+        else goalPosition = false;
         return goalPosition;
     }
 
     public Vector3 findGoalPosition() {
-        Vector3 position = ball.transform.position + ball.GetComponent<Rigidbody>().velocity;
-        return position;
+        return transform.position;
     }
 
     public void getPosition(Vector3 position) { 
@@ -142,10 +155,22 @@ public class CarControllerIA : MonoBehaviour {
         float angle = Mathf.DeltaAngle(Mathf.Atan2(transform.forward.z, transform.forward.x) * Mathf.Rad2Deg,
                                 Mathf.Atan2(directarget.z, directarget.x) * Mathf.Rad2Deg);
 
-       // if (ball.transform.position.y < 5.0f)
-        //{
-            acceleration = 1.0f;
-        //}
+
+        if (delayencallat == 0)
+        {
+            if (prevpos == transform.position)
+            {
+                acceleration = -1.0f;
+                delayencallat = 50;
+            }
+            else
+            {
+                acceleration = 1.0f;
+            }
+         }
+        else acceleration = -1.0f;
+
+        if (transform.position == position) acceleration = 0.0f;
 
         if (angle > 0.0f)
         {
@@ -161,7 +186,7 @@ public class CarControllerIA : MonoBehaviour {
         }
         else turnAxis = 0.0f;
 
-        
+        Debug.Log(acceleration+" "+delayencallat);
     }
 
     public void Reset()
