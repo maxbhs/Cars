@@ -22,24 +22,30 @@ public class CarControllerIA : MonoBehaviour {
     Quaternion originalR;
 
     Vector3 netposition;
+    Vector3 netpositionleft;
+    Vector3 netpositionright;
     Vector3 homenetposition;
 
     Vector3 hball;
     Vector3 hnet;
     Vector3 hhomenet;
     Vector3 hballnet;
+    Vector3 hballnetleft;
+    Vector3 hballnetright;
     Vector3 htarget;
 
     int delayencallat;
     Vector3 prevpos;
 
-    float dball, dnet, dhomenet, dballnet, dtarget;
+    float dball, dnet, dhomenet, dballnet, dballnetleft, dballnetright, dtarget;
 
     Vector3 directionball;
     Vector3 directionnet;
     Vector3 directionhomenet;
     Vector3 directarget;
     Vector3 directionballnet;
+    Vector3 directionballnetleft;
+    Vector3 directionballnetright;
 
     private float acceleration;
     private float turnAxis;
@@ -60,28 +66,43 @@ public class CarControllerIA : MonoBehaviour {
 
         acceleration = 0.0f;
         turnAxis = 0.0f;
-        
-        //Direccio coche centre porteria contraria
-        netposition = net.transform.position + new Vector3(0.0f, 25.6f, 0.0f);
-        hnet = netposition - transform.position;
-        dnet = hnet.magnitude;
-        directionnet = hnet / dnet;
+
 
         //Direccio coche centre porteria casa
-        homenetposition = homenet.transform.position + new Vector3(0.0f, 25.6f, 20.0f);
+        homenetposition = homenet.transform.position + new Vector3(7.0f, 30.0f, 20.0f);
         hhomenet = homenetposition - transform.position;
         dhomenet = hhomenet.magnitude;
         directionhomenet = hhomenet / dhomenet;
+
 
         //Direccio bola, distancia bola
         hball = ball.transform.position - transform.position;
         dball = hball.magnitude;
         directionball = hball / dball;
 
-        //Distancia bola i centre portaria contraria
+        
+        netposition = net.transform.position + new Vector3(7.0f, 30.0f, -20.0f);
+        netpositionleft = net.transform.position + new Vector3(-8.0f, 30.0f, -20.0f);
+        netpositionright = net.transform.position + new Vector3(20.0f, 30.0f, -20.0f);
+
+        //Direccio coche centre porteria contraria
+        hnet = netposition - transform.position;
+        dnet = hnet.magnitude;
+        directionnet = hnet / dnet;
+
+        //Distancia bola i centre, esquerra, dreta portaria contraria
         hballnet = netposition - ball.transform.position;
         dballnet = hballnet.magnitude;
         directionballnet = hballnet / dballnet;
+
+        hballnetleft = netpositionleft - ball.transform.position;
+        dballnetleft = hballnetleft.magnitude;
+        directionballnetleft = hballnetleft / dballnetleft;
+
+        
+        hballnetright = netpositionright - ball.transform.position;
+        dballnetright = hballnetright.magnitude;
+        directionballnetright = hballnetright / dballnetright;
         
         if (dballnet < dnet) {
             if (dnet > 150)
@@ -109,7 +130,14 @@ public class CarControllerIA : MonoBehaviour {
             }
         }
         else {
-            getPosition(homenetposition);
+            if (dnet > 20){
+                getPosition(homenetposition);
+            }
+            else
+            {
+                Vector3 position = ball.transform.position;
+                getPosition(position);
+            }
         }
 
 
@@ -128,20 +156,22 @@ public class CarControllerIA : MonoBehaviour {
         if (delayencallat > 0) delayencallat -= 1;
         prevpos = transform.position;
 
-        Debug.DrawRay(transform.position, transform.forward * 5.0f, Color.blue);
-        Debug.DrawRay(transform.position, directarget * 5.0f, Color.red);
-        Debug.DrawRay(ball.transform.position, directionballnet * 10.0f, Color.green);
-     
+        Debug.DrawRay(ball.transform.position, hballnet, Color.green);
+        Debug.DrawRay(ball.transform.position, hballnetleft, Color.green);
+        Debug.DrawRay(ball.transform.position, hballnetright, Color.green);
+        Debug.DrawRay(ball.transform.position, -hballnet, Color.green);
+        Debug.DrawRay(ball.transform.position, -hballnetleft, Color.green);
+        Debug.DrawRay(ball.transform.position, -hballnetright, Color.green);
+        Debug.Log(-hballnetleft + " " + -hballnetright+" "+ transform.position+" "+ball.transform.position);
 	}
 
     public bool isAGoalPosition() {
-        if (transform.forward == directionball && directionball == directionballnet)
-            goalPosition = true;
-        else goalPosition = false;
-        return goalPosition;
+
+        return false;
     }
 
     public Vector3 findGoalPosition() {
+
         return transform.position;
     }
 
@@ -174,15 +204,11 @@ public class CarControllerIA : MonoBehaviour {
 
         if (angle > 0.0f)
         {
-            turnAxis = -2.0f;
-            if (angle > 45)
-                turnAxis = -2.0f;
+            turnAxis = -3.0f;
         }
         else if (angle < 0.0f)
         {
-            turnAxis = 2.0f;
-            if (angle < -45)
-                turnAxis = 2.0f; 
+            turnAxis = 3.0f;
         }
         else turnAxis = 0.0f;
 
