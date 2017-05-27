@@ -74,10 +74,14 @@ public class CarControllerIA : MonoBehaviour {
 
 
         //Direccio coche centre porteria casa
-        homenetposition = homenet.transform.position + new Vector3(7.0f, 30.0f, 20.0f);
+       /* homenetposition = homenet.transform.position + new Vector3(7.0f, 30.0f, 20.0f);
         hhomenet = homenetposition - transform.position;
         dhomenet = hhomenet.magnitude;
-        directionhomenet = hhomenet / dhomenet;
+        directionhomenet = hhomenet / dhomenet;*/
+
+        homenetposition = homenet.transform.position;
+        if (homenetposition.z < 45) homenetposition += new Vector3(7.0f, 30.0f, 20.0f);
+        else homenetposition += new Vector3(7.0f, 30.0f, -20.0f);
 
 
         //Direccio bola, distancia bola
@@ -86,9 +90,21 @@ public class CarControllerIA : MonoBehaviour {
         directionball = hball / dball;
 
         
-        netposition = net.transform.position + new Vector3(7.0f, 30.0f, -20.0f);
+        /*netposition = net.transform.position + new Vector3(7.0f, 30.0f, -20.0f);
         netpositionleft = net.transform.position + new Vector3(-8.0f, 30.0f, -20.0f);
-        netpositionright = net.transform.position + new Vector3(20.0f, 30.0f, -20.0f);
+        netpositionright = net.transform.position + new Vector3(20.0f, 30.0f, -20.0f);*/
+
+        netposition = net.transform.position;
+        if (netposition.z < 100) netposition += new Vector3(7.0f, 30.0f, 20.0f);
+        else netposition += new Vector3(7.0f, 30.0f, -30.0f);
+
+        netpositionleft = net.transform.position;
+        if (netpositionleft.z < 100) netpositionleft += new Vector3(-8.0f, 30.0f, 20.0f);
+        else netpositionleft += new Vector3(-8.0f, 30.0f, -30.0f);
+
+        netpositionright = net.transform.position;
+        if (netpositionright.z < 100) netpositionright += new Vector3(20.0f, 30.0f,20.0f);
+        else netpositionright += new Vector3(20.0f, 30.0f, -20.0f);
 
         //Direccio coche centre porteria contraria
         hnet = netposition - transform.position;
@@ -97,22 +113,25 @@ public class CarControllerIA : MonoBehaviour {
 
         //Distancia bola i centre, esquerra, dreta portaria contraria
         hballnet = netposition - ball.transform.position;
+        hballnet.y = 0.0f;
         dballnet = hballnet.magnitude;
         directionballnet = hballnet / dballnet;
 
 
         hballnetleft = netpositionleft - ball.transform.position;
+        hballnetleft.y = 0.0f;
         dballnetleft = hballnetleft.magnitude;
         directionballnetleft = hballnetleft / dballnetleft;
 
         
         hballnetright = netpositionright - ball.transform.position;
+        hballnetright.y = 0.0f;
         dballnetright = hballnetright.magnitude;
         directionballnetright = hballnetright / dballnetright;
 
         if (!fliping)
         {
-
+            Debug.Log(dnet);
             if (dballnet < dnet)
             {
                 if (dnet > 150)
@@ -180,11 +199,11 @@ public class CarControllerIA : MonoBehaviour {
             prevpos = transform.position;
 
             bool b = isAGoalPosition();
-
+/*
             Debug.DrawRay(ball.transform.position, hballnetleft, b ? Color.green : Color.red);
             Debug.DrawRay(ball.transform.position, hballnetright, b ? Color.green : Color.red);
             Debug.DrawRay(ball.transform.position, -hballnetleft, b ? Color.green : Color.red);
-            Debug.DrawRay(ball.transform.position, -hballnetright, b ? Color.green : Color.red);
+            Debug.DrawRay(ball.transform.position, -hballnetright, b ? Color.green : Color.red);*/
         }
         else JumpToGoal = false;
 
@@ -213,7 +232,7 @@ public class CarControllerIA : MonoBehaviour {
     public Vector3 findGoalPosition() {
         Vector3 pos = ball.transform.position - hballnet;
         pos.y = 0.0f;
-        if (pos.x > 80 || pos.x < -75 || pos.z > 227 || pos.z < -88)
+        if (pos.x > 465 || pos.x < 279 || pos.z > 335 || pos.z < 45)
             pos = ball.transform.position;
         return pos;
     }
@@ -246,7 +265,6 @@ public class CarControllerIA : MonoBehaviour {
                 acceleration = -1.0f;
             else
             {
-                Debug.Log("HOLA");
                 GetComponent<Rigidbody>().AddTorque(5000 * -transform.forward);
             }
         }
