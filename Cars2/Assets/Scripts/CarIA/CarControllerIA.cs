@@ -131,7 +131,6 @@ public class CarControllerIA : MonoBehaviour {
 
         if (!fliping)
         {
-            Debug.Log(dnet);
             if (dballnet < dnet)
             {
                 if (dnet > 150)

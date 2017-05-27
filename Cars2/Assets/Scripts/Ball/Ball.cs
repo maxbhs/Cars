@@ -29,14 +29,11 @@ public class Ball : MonoBehaviour {
     {
         if (collision.gameObject.name == "Car")
         {
-            //Physics.IgnoreCollision(car.GetComponent<Collider>(), GetComponent<Collider>(), true);
-
-          
-            //speed = (car.GetComponent<Rigidbody>().velocity - GetComponent<Rigidbody>().velocity).magnitude;
-            //heading = transform.position - car.transform.position;
-            //distance = heading.magnitude;
-            //direction = heading / distance;
-            //GetComponent<Rigidbody>().velocity -= speed * direction;
+            speed = (car.GetComponent<Rigidbody>().velocity - GetComponent<Rigidbody>().velocity).magnitude;
+            heading = transform.position - car.transform.position;
+            distance = heading.magnitude;
+            direction = heading / distance;
+            GetComponent<Rigidbody>().velocity = speed * direction;
             
         }        
     }

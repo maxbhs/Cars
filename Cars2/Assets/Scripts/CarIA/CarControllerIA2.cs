@@ -131,8 +131,6 @@ public class CarControllerIA2 : MonoBehaviour
         directionballnetright = hballnetright / dballnetright;
 
 
-        Debug.Log(dballnet);
-
         if (dballnet > 150  )
         {
                 getPosition(homenetposition);
@@ -140,7 +138,6 @@ public class CarControllerIA2 : MonoBehaviour
         else {
             if (isAGoalPosition())
             {
-                Debug.Log("HOLA");
                 getPosition(ball.transform.position);
                 acceleration *= 2;
             }
