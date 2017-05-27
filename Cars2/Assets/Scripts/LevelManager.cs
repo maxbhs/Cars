@@ -11,8 +11,8 @@ public class LevelManager : MonoBehaviour {
     public Text ganador;
     public Text overtime;
     public Text exit;
-    public GameObject Mcar;
-    public GameObject Menemy;
+    public GameObject[] AllyCars;
+    public GameObject[] EnemyCars;
 
     public float time;
 
@@ -37,23 +37,35 @@ public class LevelManager : MonoBehaviour {
         tog = GameObject.FindObjectOfType(typeof(TypeOfGame)) as TypeOfGame;
         if (tog.YM() == 2)
         {
-            Mcar.transform.GetChild(0).gameObject.SetActive(false);
-            Mcar.transform.GetChild(1).gameObject.SetActive(true);
+            for (int i = 0; i < AllyCars.Length; i++)
+            {
+                AllyCars[i].transform.GetChild(0).gameObject.SetActive(false);
+                AllyCars[i].transform.GetChild(1).gameObject.SetActive(true);
+            }
         }
         else if (tog.YM() == 3)
         {
-            Mcar.transform.GetChild(0).gameObject.SetActive(false);
-            Mcar.transform.GetChild(2).gameObject.SetActive(true);
+            for (int i = 0; i < AllyCars.Length; i++)
+            {
+                AllyCars[i].transform.GetChild(0).gameObject.SetActive(false);
+                AllyCars[i].transform.GetChild(2).gameObject.SetActive(true);
+            }
         }
         if (tog.EM() == 2)
         {
-            Menemy.transform.GetChild(0).gameObject.SetActive(false);
-            Menemy.transform.GetChild(1).gameObject.SetActive(true);
+            for (int i = 0; i < EnemyCars.Length; i++)
+            {
+                EnemyCars[i].transform.GetChild(0).gameObject.SetActive(false);
+                EnemyCars[i].transform.GetChild(1).gameObject.SetActive(true);
+            }
         }
         else if (tog.EM() == 3)
         {
-            Menemy.transform.GetChild(0).gameObject.SetActive(false);
-            Menemy.transform.GetChild(2).gameObject.SetActive(true);
+            for (int i = 0; i < EnemyCars.Length; i++)
+            {
+                EnemyCars[i].transform.GetChild(0).gameObject.SetActive(false);
+                EnemyCars[i].transform.GetChild(2).gameObject.SetActive(true);
+            }
         }
 
 

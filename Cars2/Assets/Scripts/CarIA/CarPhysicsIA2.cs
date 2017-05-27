@@ -1,39 +1,41 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CarPhysicsIA : MonoBehaviour {
+public class CarPhysicsIA2 : MonoBehaviour
+{
 
     public bool grounded = true;
     public float groundedDrag = 3f;
-    
+
     public float hoverForce = 2000;
     public float gravityForce = 2000f;
     public float hoverHeight = 1f;
 
     float boostFactor;
     public float boostImpulse = 100000f;
-    
+
     public float turnStrength = 1000f;
     public float thrust;
     public float turnValue;
     public float forwardAcceleration = 8000f;
     public float reverseAcceleration = 4000f;
-    
-    
+
+
     private int rodas = 0;
 
     // Use this for initialization
-    void Start () {
-        
-       GetComponent<Rigidbody>().centerOfMass = new Vector3(0.0f, -0.5f, 0.0f);
+    void Start()
+    {
+
+        GetComponent<Rigidbody>().centerOfMass = new Vector3(0.0f, -0.5f, 0.0f);
     }
 
     void FixedUpdate()
     {
 
-        thrust = GetComponent<CarControllerIA>().thrust;
-        turnValue = GetComponent<CarControllerIA>().turnValue;
-        boostFactor = GetComponent<CarControllerIA>().boostFactor;
+        thrust = GetComponent<CarControllerIA2>().thrust;
+        turnValue = GetComponent<CarControllerIA2>().turnValue;
+        boostFactor = GetComponent<CarControllerIA2>().boostFactor;
 
         //Position
         Vector3 leftRear = transform.TransformPoint(new Vector3(-0.5f, -0.5f, -0.5f));
@@ -185,5 +187,5 @@ public class CarPhysicsIA : MonoBehaviour {
 
         GetComponent<Rigidbody>().AddForceAtPosition(boostFactor * boostImpulse * transform.forward,
                                                            transform.position - 0.6f * transform.up);
-    }    
+    }
 }

@@ -12,7 +12,8 @@ public class Ball : MonoBehaviour {
     Quaternion originalR;
 
     public GameObject car;
-    public GameObject carIA;
+    public GameObject[] carIA;
+    public GameObject[] carIA2;
     public LevelManager LM;
 
     // Use this for initialization
@@ -63,6 +64,11 @@ public class Ball : MonoBehaviour {
         GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
         GetComponent<Rigidbody>().angularVelocity = new Vector3(0, 0, 0);
         car.GetComponent<CarController>().Reset();
-        carIA.GetComponent<CarControllerIA>().Reset();
+        for (int i = 0; i < carIA.Length; i++ )
+            carIA[i].GetComponent<CarControllerIA>().Reset();
+
+        if (carIA2 != null)
+            for (int i = 0; i < carIA2.Length; i++)
+                carIA2[i].GetComponent<CarControllerIA2>().Reset();
     }
 }

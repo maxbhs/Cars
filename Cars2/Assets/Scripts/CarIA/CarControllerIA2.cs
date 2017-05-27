@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CarControllerIA : MonoBehaviour {
+public class CarControllerIA2 : MonoBehaviour
+{
 
 
     public float thrust = 0.0f;
@@ -52,22 +53,24 @@ public class CarControllerIA : MonoBehaviour {
     private float acceleration;
     private float turnAxis;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
 
-        forwardAcceleration = GetComponent<CarPhysicsIA>().forwardAcceleration;
-        reverseAcceleration = GetComponent<CarPhysicsIA>().reverseAcceleration;
-        grounded = GetComponent<CarPhysicsIA>().grounded;
+        forwardAcceleration = GetComponent<CarPhysicsIA2>().forwardAcceleration;
+        reverseAcceleration = GetComponent<CarPhysicsIA2>().reverseAcceleration;
+        grounded = GetComponent<CarPhysicsIA2>().grounded;
         fliping = GetComponent<JumpIA>().fliping;
 
         originalP = transform.position;
         originalR = transform.rotation;
 
         delayencallat = 0;
-	}
-	
-	// Update is called once per frame
-	void FixedUpdate () {
+    }
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
 
         acceleration = 0.0f;
         turnAxis = 0.0f;
@@ -85,7 +88,7 @@ public class CarControllerIA : MonoBehaviour {
         dball = hball.magnitude;
         directionball = hball / dball;
 
-        
+
         netposition = net.transform.position + new Vector3(7.0f, 30.0f, -20.0f);
         netpositionleft = net.transform.position + new Vector3(-8.0f, 30.0f, -20.0f);
         netpositionright = net.transform.position + new Vector3(20.0f, 30.0f, -20.0f);
@@ -105,7 +108,7 @@ public class CarControllerIA : MonoBehaviour {
         dballnetleft = hballnetleft.magnitude;
         directionballnetleft = hballnetleft / dballnetleft;
 
-        
+
         hballnetright = netpositionright - ball.transform.position;
         dballnetright = hballnetright.magnitude;
         directionballnetright = hballnetright / dballnetright;
@@ -124,7 +127,7 @@ public class CarControllerIA : MonoBehaviour {
                         getPosition(position);
                     }
                     else acceleration = 0.0f;
-  
+
                 }
                 else
                 {
@@ -134,7 +137,7 @@ public class CarControllerIA : MonoBehaviour {
                         if (isAGoalPosition())
                         {
                             //if (dball > 30)
-                                //JumpToGoal = true;
+                            //JumpToGoal = true;
 
                             Vector3 position = ball.transform.position;
                             getPosition(position);
@@ -188,12 +191,13 @@ public class CarControllerIA : MonoBehaviour {
         }
         else JumpToGoal = false;
 
-	}
+    }
 
-    public bool isAGoalPosition() {
+    public bool isAGoalPosition()
+    {
 
-        Vector3 pLeft = ball.transform.position - hballnetleft * dball/hballnetleft.z;
-        Vector3 pRight = ball.transform.position - hballnetright * dball/ hballnetright.z;
+        Vector3 pLeft = ball.transform.position - hballnetleft * dball / hballnetleft.z;
+        Vector3 pRight = ball.transform.position - hballnetright * dball / hballnetright.z;
 
         if (transform.position.x < pLeft.x && transform.position.x > pRight.x && transform.position.z < ball.transform.position.z)
         {
@@ -210,7 +214,8 @@ public class CarControllerIA : MonoBehaviour {
         else return false;
     }
 
-    public Vector3 findGoalPosition() {
+    public Vector3 findGoalPosition()
+    {
         Vector3 pos = ball.transform.position - hballnet;
         pos.y = 0.0f;
         if (pos.x > 80 || pos.x < -75 || pos.z > 227 || pos.z < -88)
@@ -218,7 +223,8 @@ public class CarControllerIA : MonoBehaviour {
         return pos;
     }
 
-    public void getPosition(Vector3 position) { 
+    public void getPosition(Vector3 position)
+    {
 
         htarget = position - transform.position;
         dtarget = htarget.magnitude;
@@ -246,7 +252,6 @@ public class CarControllerIA : MonoBehaviour {
                 acceleration = -1.0f;
             else
             {
-                Debug.Log("HOLA");
                 GetComponent<Rigidbody>().AddTorque(5000 * -transform.forward);
             }
         }

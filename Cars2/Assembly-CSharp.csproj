@@ -60,7 +60,9 @@
      <Compile Include="Assets\Scripts\Car\FPSDisplay.cs" />
      <Compile Include="Assets\Scripts\Car\Jump.cs" />
      <Compile Include="Assets\Scripts\CarIA\CarControllerIA.cs" />
+     <Compile Include="Assets\Scripts\CarIA\CarControllerIA2.cs" />
      <Compile Include="Assets\Scripts\CarIA\CarPhysicsIA.cs" />
+     <Compile Include="Assets\Scripts\CarIA\CarPhysicsIA2.cs" />
      <Compile Include="Assets\Scripts\CarIA\JumpIA.cs" />
      <Compile Include="Assets\Scripts\LevelManager.cs" />
      <Compile Include="Assets\Scripts\Turbo\Rotator.cs" />
