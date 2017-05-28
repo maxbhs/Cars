@@ -79,9 +79,11 @@ public class CarControllerIA : MonoBehaviour {
         dhomenet = hhomenet.magnitude;
         directionhomenet = hhomenet / dhomenet;*/
 
+        float dir = Random.Range(0, 20);
+
         homenetposition = homenet.transform.position;
-        if (homenetposition.z < 45) homenetposition += new Vector3(7.0f, 30.0f, 20.0f);
-        else homenetposition += new Vector3(7.0f, 30.0f, -20.0f);
+        if (homenetposition.z < 45) homenetposition += new Vector3(dir, 30.0f, 30.0f);
+        else homenetposition += new Vector3(dir, 30.0f, -30.0f);
 
 
         //Direccio bola, distancia bola
@@ -198,13 +200,15 @@ public class CarControllerIA : MonoBehaviour {
             prevpos = transform.position;
 
             bool b = isAGoalPosition();
-/*
+
             Debug.DrawRay(ball.transform.position, hballnetleft, b ? Color.green : Color.red);
             Debug.DrawRay(ball.transform.position, hballnetright, b ? Color.green : Color.red);
             Debug.DrawRay(ball.transform.position, -hballnetleft, b ? Color.green : Color.red);
-            Debug.DrawRay(ball.transform.position, -hballnetright, b ? Color.green : Color.red);*/
+            Debug.DrawRay(ball.transform.position, -hballnetright, b ? Color.green : Color.red);
         }
         else JumpToGoal = false;
+        int cont = 0;
+        //Debug.Log(ball.transform.position+" "+BallLanding(cont)+" "+cont);
 
 	}
 
@@ -236,6 +240,15 @@ public class CarControllerIA : MonoBehaviour {
         return pos;
     }
 
+    public Vector3 BallLanding(int cont) {
+        Vector3 posball = ball.transform.position;
+        while (posball.y> 0.0) {
+            posball += ball.GetComponent<Rigidbody>().velocity;
+            ++cont;     
+        }
+        return posball;
+    }
+
     public void getPosition(Vector3 position) { 
 
         htarget = position - transform.position;
@@ -264,7 +277,7 @@ public class CarControllerIA : MonoBehaviour {
                 acceleration = -1.0f;
             else
             {
-                GetComponent<Rigidbody>().AddTorque(5000 * -transform.forward);
+                GetComponent<Rigidbody>().AddTorque(500000 * -transform.forward);
             }
         }
 

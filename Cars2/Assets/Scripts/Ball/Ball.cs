@@ -29,12 +29,12 @@ public class Ball : MonoBehaviour {
     {
         if (collision.gameObject.name == "Car")
         {
-            speed = (car.GetComponent<Rigidbody>().velocity - GetComponent<Rigidbody>().velocity).magnitude;
+            /*speed = (car.GetComponent<Rigidbody>().velocity - GetComponent<Rigidbody>().velocity).magnitude;
             heading = transform.position - car.transform.position;
             distance = heading.magnitude;
             direction = heading / distance;
             GetComponent<Rigidbody>().velocity = speed * direction;
-            
+            */
         }        
     }
 

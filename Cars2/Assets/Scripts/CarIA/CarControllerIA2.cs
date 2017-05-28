@@ -79,9 +79,11 @@ public class CarControllerIA2 : MonoBehaviour
         //Direccio coche centre porteria casa
 
         homenetposition = homenet.transform.position;
-        
-        if (homenetposition.z < 45) homenetposition += new Vector3(7.0f, 30.0f, 20.0f);
-        else homenetposition += new Vector3(7.0f, 30.0f, -20.0f);
+
+        float dir = Random.Range(0, 20);
+
+        if (homenetposition.z < 45) homenetposition += new Vector3(dir, 30.0f, 30.0f);
+        else homenetposition += new Vector3(dir, 30.0f, -30.0f);
 
 
         hhomenet = homenetposition - transform.position;
@@ -181,19 +183,19 @@ public class CarControllerIA2 : MonoBehaviour
         Vector3 pLeft = ball.transform.position - hballnetleft * dball / hballnetleft.z;
         Vector3 pRight = ball.transform.position - hballnetright * dball / hballnetright.z;
 
-        if (transform.position.x < pLeft.x && transform.position.x > pRight.x && transform.position.z < ball.transform.position.z)
-        {
-            return true;
-        }
-        else if (transform.position.x > pLeft.x)
-        {
-            return false;
-        }
-        else if (transform.position.x < pRight.x)
-        {
-            return false;
-        }
-        else return false;
+            if (transform.position.x > pLeft.x && transform.position.x < pRight.x && transform.position.z < ball.transform.position.z)
+            {
+                return true;
+            }
+            else if (transform.position.x > pLeft.x)
+            {
+                return false;
+            }
+            else if (transform.position.x < pRight.x)
+            {
+                return false;
+            }
+            else return false;
     }
 
     public Vector3 findGoalPosition()
@@ -234,7 +236,7 @@ public class CarControllerIA2 : MonoBehaviour
                 acceleration = -1.0f;
             else
             {
-                GetComponent<Rigidbody>().AddTorque(5000 * -transform.forward);
+                GetComponent<Rigidbody>().AddTorque(500000 * -transform.forward);
             }
         }
 
